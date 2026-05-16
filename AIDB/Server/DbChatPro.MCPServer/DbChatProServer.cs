@@ -12,11 +12,12 @@ namespace DBChatPro.MCPServer
     public class DbChatProServer
     {
         // Services for database and AI operations
-        private readonly SqlServerDatabaseService _dataService;
+        //private readonly SqlServerDatabaseService _dataService;
+        private readonly IDatabaseService _dataService;
         private readonly AIService _aiService;
 
         // Constructor injects required services
-        public DbChatProServer(SqlServerDatabaseService dataService, AIService aiService)
+        public DbChatProServer(IDatabaseService dataService, AIService aiService)
         {
             _dataService = dataService;
             _aiService = aiService;
