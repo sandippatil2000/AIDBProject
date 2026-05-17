@@ -1,3 +1,4 @@
+using DBChatPro;
 using DBChatPro.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,12 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<IConnectionService, InMemoryConnectionService>();
+
+builder.Services.AddScoped<IDatabaseService, DatabaseManagerService>();
+builder.Services.AddScoped<MySqlDatabaseService>();
+builder.Services.AddScoped<SqlServerDatabaseService>();
+builder.Services.AddScoped<PostgresDatabaseService>();
+builder.Services.AddScoped<OracleDatabaseService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
