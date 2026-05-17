@@ -17,7 +17,16 @@ builder.Services.AddScoped<PostgresDatabaseService>();
 builder.Services.AddScoped<OracleDatabaseService>();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
 
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -40,4 +49,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors("AllowAll");
 app.Run();

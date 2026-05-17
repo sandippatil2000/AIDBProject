@@ -1,6 +1,6 @@
 import type { ApiResponse, User } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7038/api';
 
 export const apiClient = {
   get: async <T>(endpoint: string): Promise<ApiResponse<T>> => {

@@ -24,6 +24,7 @@ import { DBTypes } from '../types/DBTypes';
 import type { Connection } from '../types/Connection';
 import { ConnectionDialog } from '../components/ConnectionDialog';
 import { ConnectionAPI } from '../services/ConnactionAPI';
+import { DatabaseAPI } from '../services/DatabaseAPI';
 import { mockConnections } from '../services/data';
 
 const getStatusColor = (status: Connection['status']) => {
@@ -117,6 +118,16 @@ export const ConnectionsPage = () => {
       setIsDialogOpen(false);
     } catch (error) {
       console.error('Failed to save connection:', error);
+    }
+  };
+
+  const handleTest = async (conn: Connection) => {
+    try {
+      await DatabaseAPI.getSchema(conn.name);
+      alert(`Test successful for ${conn.name}`);
+    } catch (error) {
+      console.error('Failed to test connection:', error);
+      alert(`Test failed for ${conn.name}`);
     }
   };
 
@@ -231,7 +242,7 @@ export const ConnectionsPage = () => {
                 <Divider />
 
                 <CardActions sx={{ px: 2, py: 1.5, display: 'flex', justifyContent: 'space-between' }}>
-                  <Button size="small" startIcon={<RefreshIcon />} color="inherit" sx={{ color: 'text.secondary' }}>
+                  <Button size="small" startIcon={<RefreshIcon />} color="inherit" sx={{ color: 'text.secondary' }} onClick={() => handleTest(conn)}>
                     Test
                   </Button>
                   <Box>

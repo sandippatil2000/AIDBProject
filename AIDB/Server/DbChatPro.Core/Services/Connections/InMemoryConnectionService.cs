@@ -1,11 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
+using DbChatPro.Core.Data;
 
 namespace DBChatPro.Services
 {
     public class InMemoryConnectionService : IConnectionService
     {
-        private List<AIConnection> connections = new();
+        private List<AIConnection> connections = ConnectionData.GetConnectionData();
 
         public async Task<List<AIConnection>> GetAIConnections()
         {
@@ -20,7 +21,10 @@ namespace DBChatPro.Services
         public async Task DeleteConnection(string name)
         {
             var connection = connections.FirstOrDefault(x => x.Name == name);
-            connections.Remove(connection);
+            if (connection != null)
+            {
+                connections.Remove(connection);
+            }
         }
     }
 }
