@@ -9,7 +9,7 @@ namespace DBChatPro
         public async Task<List<List<string>>> GetDataTable(AIConnection conn, string sqlQuery)
         {
             var rows = new List<List<string>>();
-            MySqlConnection connection = new MySqlConnection(conn.ConnectionString);
+            MySqlConnection connection = new MySqlConnection(conn.connectionString);
 
             await connection.OpenAsync();
 
@@ -54,7 +54,7 @@ namespace DBChatPro
             var dbSchema = new DatabaseSchema() { SchemaRaw = new List<string>(), SchemaStructured = new List<TableSchema>() };
             List<KeyValuePair<string, string>> rows = new();
 
-            var pairs = conn.ConnectionString.Split(";");
+            var pairs = conn.connectionString.Split(";");
             var database = pairs.Where(x => x.Contains("Database")).FirstOrDefault().Split("=").Last();
 
             string sqlQuery = $@"SELECT 
@@ -65,7 +65,7 @@ namespace DBChatPro
                                 WHERE 
                                     TABLE_SCHEMA = '{database}';";
 
-            MySqlConnection connection = new MySqlConnection(conn.ConnectionString);
+            MySqlConnection connection = new MySqlConnection(conn.connectionString);
 
             connection.Open();
 

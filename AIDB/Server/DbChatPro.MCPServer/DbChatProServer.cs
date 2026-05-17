@@ -60,7 +60,7 @@ namespace DBChatPro.MCPServer
             }
 
             // Build connection and get schema
-            var connection = new AIConnection() { ConnectionString = databaseConnectionString };
+            var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
             // Get AI-generated SQL and run it
             var aiResponse = await _aiService.GetAISQLQuery(aiModel, aiPlatform, prompt, dbSchema, databaseType);
@@ -82,7 +82,7 @@ namespace DBChatPro.MCPServer
                 throw new ArgumentException("DATABASECONNECTIONSTRING is not set in the configuration.");
             }
             // Build connection and get schema
-            var connection = new AIConnection() { ConnectionString = databaseConnectionString };
+            var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
             return dbSchema;
         }
@@ -121,7 +121,7 @@ namespace DBChatPro.MCPServer
                 throw new ArgumentException("prompt is required.");
             }
             // Build connection and get schema
-            var connection = new AIConnection() { ConnectionString = databaseConnectionString };
+            var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
             // Get AI-generated SQL
             var aiResponse = await _aiService.GetAISQLQuery(aiModel, aiPlatform, prompt, dbSchema, databaseType);

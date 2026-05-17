@@ -46,9 +46,9 @@ export const navItems: NavItem[] = [
     label: 'Data Management',
     icon: <StorageIcon />,
     children: [
-      { label: 'Databases', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/databases' },
-      { label: 'Tables', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/tables' },
-      { label: 'Queries', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/queries' },
+      { label: 'Connections', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/Connections' },
+      { label: 'History', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/History' },
+      { label: 'Config', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/Config' },
     ],
   },
   {

@@ -391,7 +391,7 @@
             Loading = true;
             ChatHistory.Clear();
             LoadingMessage = "Getting the AI query...";
-            var aiResponse = await aiService.GetAISQLQuery(aiModel, aiPlatform, Prompt, dbSchema, ActiveConnection.DatabaseType);
+            var aiResponse = await aiService.GetAISQLQuery(aiModel, aiPlatform, Prompt, dbSchema, ActiveConnection.databaseType);
 
             Query = aiResponse.query;
             Summary = aiResponse.summary;

@@ -26,7 +26,7 @@
                 </div>
                 <MudCard>
                     <MudCardContent>
-                        <MudSelect @bind-Value="aiConnection.DatabaseType"
+                        <MudSelect @bind-Value="aiConnection.databaseType"
                                    Label="Database Type">
                             <MudSelectItem Value="@("MSSQL")" T="string">MSSQL</MudSelectItem>
                             <MudSelectItem Value="@("MYSQL")" T="string">MYSQL</MudSelectItem>
@@ -34,7 +34,7 @@
                             <MudSelectItem Value="@("ORACLE")" T="string">ORACLE</MudSelectItem>
                         </MudSelect>
                         <MudTextField @bind-Value="aiConnection.Name" T="string" Label="Connection name" Variant="Variant.Text" />
-                        <MudTextField @bind-Value="aiConnection.ConnectionString" T="string" Label="Connection string" Variant="Variant.Text" Lines="5" />
+                        <MudTextField @bind-Value="aiConnection.connectionString" T="string" Label="Connection string" Variant="Variant.Text" Lines="5" />
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Check Connection</MudButton>

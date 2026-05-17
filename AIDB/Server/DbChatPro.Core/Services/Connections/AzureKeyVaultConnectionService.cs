@@ -8,7 +8,7 @@ namespace DBChatPro.Services
     {
         public async Task AddConnection(AIConnection connection)
         {
-            await secretClient.SetSecretAsync(connection.Name, connection.ConnectionString);
+            await secretClient.SetSecretAsync(connection.Name, connection.connectionString);
         }
 
         public async Task DeleteConnection(string name)
@@ -30,7 +30,7 @@ namespace DBChatPro.Services
                 foreach (var secret in page.Values)
                 {
                     var secretValue = await secretClient.GetSecretAsync(secret.Name);
-                    connections.Add(new AIConnection() { Name = secret.Name, ConnectionString = secretValue.Value.Value });
+                    connections.Add(new AIConnection() { Name = secret.Name, connectionString = secretValue.Value.Value });
                 }
             }
 

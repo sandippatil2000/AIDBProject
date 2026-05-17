@@ -77,9 +77,8 @@ export const Navbar = ({ onMenuClick, sidebarOpen }: NavbarProps) => {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
-        backgroundColor: '#ffffff',
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        color: 'text.primary',
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
       }}
     >
       <Toolbar sx={{ gap: 1 }}>
@@ -89,19 +88,19 @@ export const Navbar = ({ onMenuClick, sidebarOpen }: NavbarProps) => {
           color="inherit"
           edge="start"
           onClick={onMenuClick}
-          sx={{ color: 'text.secondary' }}
+          sx={{ color: 'inherit' }}
         >
           <MenuIcon />
         </IconButton>
 
         {/* Active page title derived from the same navItems used in Sidebar */}
-        <Typography variant="h6" fontWeight={600} sx={{ flexGrow: 1, color: 'text.primary' }}>
+        <Typography variant="h6" fontWeight={600} sx={{ flexGrow: 1, color: 'inherit' }}>
           {pageTitle}
         </Typography>
 
         {/* Notifications */}
         <Tooltip title="Notifications">
-          <IconButton id="nav-notifications" sx={{ color: 'text.secondary' }}>
+          <IconButton id="nav-notifications" sx={{ color: 'inherit' }}>
             <Badge badgeContent={3} color="primary">
               <NotificationsIcon />
             </Badge>
@@ -115,7 +114,7 @@ export const Navbar = ({ onMenuClick, sidebarOpen }: NavbarProps) => {
               sx={{
                 width: 36,
                 height: 36,
-                bgcolor: 'primary.main',
+                bgcolor: 'primary.light',
                 fontSize: 14,
                 fontWeight: 700,
               }}

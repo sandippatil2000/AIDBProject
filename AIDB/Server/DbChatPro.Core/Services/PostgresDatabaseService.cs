@@ -10,7 +10,7 @@ namespace DBChatPro
         public async Task<List<List<string>>> GetDataTable(AIConnection conn, string sqlQuery)
         {
             var rows = new List<List<string>>();
-            var dataSource = NpgsqlDataSource.Create(conn.ConnectionString);
+            var dataSource = NpgsqlDataSource.Create(conn.connectionString);
 
             await using (var cmd = dataSource.CreateCommand(sqlQuery))
             
@@ -55,7 +55,7 @@ namespace DBChatPro
             var dbSchema = new DatabaseSchema() { SchemaRaw = new List<string>(), SchemaStructured = new List<TableSchema>() };
             List<KeyValuePair<string, string>> rows = new();
 
-            var pairs = conn.ConnectionString.Split(";");
+            var pairs = conn.connectionString.Split(";");
             var database = pairs.Where(x => x.Contains("Database")).FirstOrDefault().Split("=").Last();
             var schemaName = pairs.Where(x => x.Contains("SearchPath")).DefaultIfEmpty("public").FirstOrDefault().Split("=").Last();
 
@@ -72,7 +72,7 @@ namespace DBChatPro
                                     column_name;";
 
 
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(conn.ConnectionString);
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(conn.connectionString);
             var dataSource = dataSourceBuilder.Build();
 
             var connection = await dataSource.OpenConnectionAsync();

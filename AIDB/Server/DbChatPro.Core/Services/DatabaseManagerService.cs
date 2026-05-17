@@ -15,7 +15,7 @@ namespace DBChatPro
     {
         public async Task<List<List<string>>> GetDataTable(AIConnection conn, string sqlQuery)
         {
-            switch (conn.DatabaseType)
+            switch (conn.databaseType)
             {
                 case "MSSQL":
                     return await msSqlDb.GetDataTable(conn, sqlQuery);
@@ -32,7 +32,7 @@ namespace DBChatPro
 
         public async Task<DatabaseSchema> GenerateSchema(AIConnection conn)
         {
-            switch (conn.DatabaseType)
+            switch (conn.databaseType)
             {
                 case "MSSQL":
                     return await msSqlDb.GenerateSchema(conn);

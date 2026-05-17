@@ -10,7 +10,7 @@ namespace DBChatPro
         public async Task<List<List<string>>> GetDataTable(AIConnection conn, string sqlQuery)
         {
             var rows = new List<List<string>>();
-            using (SqlConnection connection = new SqlConnection(conn.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(conn.connectionString))
             {
                 using var command = new SqlCommand(sqlQuery, connection);
 
@@ -58,7 +58,7 @@ namespace DBChatPro
             var dbSchema = new DatabaseSchema() { SchemaRaw = new List<string>(), SchemaStructured = new List<TableSchema>() };
             List<KeyValuePair<string, string>> rows = new();
 
-            using (SqlConnection connection = new SqlConnection(conn.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(conn.connectionString))
             {
                 await connection.OpenAsync();
 

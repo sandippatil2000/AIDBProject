@@ -11,7 +11,7 @@ namespace DBChatPro
         public async Task<List<List<string>>> GetDataTable(AIConnection conn, string sqlQuery)
         {
             var rows = new List<List<string>>();
-            using (OracleConnection connection = new OracleConnection(conn.ConnectionString))
+            using (OracleConnection connection = new OracleConnection(conn.connectionString))
             {
                 using var command = new OracleCommand(sqlQuery, connection);
 
@@ -59,7 +59,7 @@ namespace DBChatPro
             var dbSchema = new DatabaseSchema() { SchemaRaw = new List<string>(), SchemaStructured = new List<TableSchema>() };
             List<KeyValuePair<string, string>> rows = new();
 
-            using (OracleConnection con = new OracleConnection(conn.ConnectionString))
+            using (OracleConnection con = new OracleConnection(conn.connectionString))
             {
                 using (OracleCommand command = con.CreateCommand())
                 {
