@@ -1,3 +1,4 @@
+import type { DatabaseSchema } from '../types/Schema';
 import { apiClient } from './api';
 
 export interface QueryRequest {
@@ -6,7 +7,7 @@ export interface QueryRequest {
 
 export const DatabaseAPI = {
   getSchema: async (connectionName: string) => {
-    return apiClient.get<any>(`/Database/schema/${encodeURIComponent(connectionName)}`);
+    return apiClient.get<DatabaseSchema>(`/Database/schema/${encodeURIComponent(connectionName)}`);
   },
 
   getDataTable: async (connectionName: string, queryRequest: QueryRequest) => {

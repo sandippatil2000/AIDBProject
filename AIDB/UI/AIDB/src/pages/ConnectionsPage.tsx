@@ -26,6 +26,7 @@ import { ConnectionDialog } from '../components/ConnectionDialog';
 import { ConnectionAPI } from '../services/ConnactionAPI';
 import { DatabaseAPI } from '../services/DatabaseAPI';
 import { mockConnections } from '../services/data';
+import type { DatabaseSchema } from '../types/Schema';
 
 const getStatusColor = (status: Connection['status']) => {
   switch (status) {
@@ -123,8 +124,15 @@ export const ConnectionsPage = () => {
 
   const handleTest = async (conn: Connection) => {
     try {
-      await DatabaseAPI.getSchema(conn.name);
-      alert(`Test successful for ${conn.name}`);
+      const response: any = await DatabaseAPI.getSchema(conn.name);
+      const schema: DatabaseSchema = response?.data || response;
+
+      console.log('Schema parsed:', schema);
+      if (schema && schema.schemaStructured) {
+        alert(`Test successful for ${conn.name}. Found ${schema.schemaStructured.length} tables.`);
+      } else {
+        alert(`Test successful for ${conn.name}`);
+      }
     } catch (error) {
       console.error('Failed to test connection:', error);
       alert(`Test failed for ${conn.name}`);
