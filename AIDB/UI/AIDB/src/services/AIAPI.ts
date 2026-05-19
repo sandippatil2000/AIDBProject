@@ -1,5 +1,5 @@
-import type { AIChatRequest } from './AIChatRequest';
-import type { AIQueryRequest } from './AIQueryRequest';
+import type { AIChatRequest } from '../types/AIChatRequest';
+import type { AIQueryRequest } from '../types/AIQueryRequest';
 import { apiClient } from './api';
 
 // ── API service ───────────────────────────────────────────────────────────────
