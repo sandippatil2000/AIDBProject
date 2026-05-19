@@ -23,7 +23,7 @@ namespace DbChatPro.Core.Data
                     database = "aidb_main",
                     status = "connected",
                     lastPing = "2 mins ago",
-                    connectionString = ""
+                    connectionString = "Data Source=ADMIN;Initial Catalog=AdventureWorks2025;Persist Security Info=True;User ID=sa;Password=sa123;Encrypt=True;Trust Server Certificate=True"
                 },
                 new AIConnection
                 {

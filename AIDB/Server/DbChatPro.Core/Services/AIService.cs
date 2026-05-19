@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DBChatPro.Services
 {
-    public class AIService(IConfiguration config, IServiceProvider serviceProvider)
+    public class AIService(IConfiguration config, IServiceProvider serviceProvider): IAIService
     {
         IChatClient aiClient;
 
