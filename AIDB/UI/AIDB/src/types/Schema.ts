@@ -1,11 +1,38 @@
-// Represents a single table with its columns
-export interface TableSchema {
-    tableName: string;
-    columns: string[];
+export type FieldType = 'string' | 'number' | 'date' | 'boolean' | 'categorical';
+
+export interface FieldSchema {
+  key: string;
+  label: string;
+  type: FieldType;
+  isNumeric: boolean;
+  isDate: boolean;
+  isCategorical: boolean;
+  uniqueCount: number;
+  sampleValues: unknown[];
 }
 
-// Represents the entire JSON schema structure
-export interface DatabaseSchema {
-    schemaStructured: TableSchema[];
-    schemaRaw: string[];
+export interface JsonSchema {
+  fields: FieldSchema[];
+  rowCount: number;
+  domain: string;
+}
+
+export type ChartType =
+  | 'bar'
+  | 'line'
+  | 'pie'
+  | 'doughnut'
+  | 'radar'
+  | 'polarArea'
+  | 'bubble'
+  | 'scatter'
+  | 'area'
+  | 'mixed';
+
+export interface ChartRecommendation {
+  chartType: ChartType;
+  labelField: string;
+  valueFields: string[];
+  title: string;
+  reasoning: string;
 }
