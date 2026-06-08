@@ -377,49 +377,106 @@ body::before {
   border: 1px solid rgba(20, 184, 166, 0.3);
 }
 
+.rec-rows {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+}
+
 .rec-title {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.rec-reasoning {
+/* Chart-type badges row under the title */
+.rec-badges {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 6px;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
 }
 
-.rec-reasoning svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-secondary); }
+.chart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+}
 
-/* ─── Tabs ───────────────────────────────────────────────────── */
+.chart-badge--best {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--text-primary);
+}
+
+.badge-star {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+  letter-spacing: 0.3px;
+}
+
+/* ─── Tabs Wrapper ───────────────────────────────────────────── */
+.tabs-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabs-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.tabs-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border-glass);
+  flex-shrink: 0;
+}
+
 .tabs {
   display: flex;
+  align-items: center;
   gap: 4px;
   background: var(--bg-glass);
   border: 1px solid var(--border-glass);
   border-radius: 12px;
-  padding: 5px;
-  width: fit-content;
+  padding: 4px;
 }
 
 .tab-btn {
   font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
+  gap: 5px;
+  padding: 7px 14px;
   border: none;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-muted);
   background: transparent;
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .tab-btn:hover { color: var(--text-primary); background: var(--bg-glass-hover); }
@@ -430,17 +487,82 @@ body::before {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
 }
 
+/* Best-chart tab gets a subtle amber star */
+.tab-btn--best .tab-star {
+  font-size: 0.65rem;
+  color: var(--accent-amber);
+}
+
+.tab-btn--best.active .tab-star { color: #fde68a; }
+
+.tab-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Data tabs are slightly smaller */
+.tab-btn--data {
+  padding: 7px 12px;
+  font-size: 0.8rem;
+}
+
 /* ─── Tab Content ────────────────────────────────────────────── */
 .tab-content {
   padding: 24px;
-  min-height: 400px;
+  min-height: 460px;
 }
 
-/* ─── Chart ──────────────────────────────────────────────────── */
+/* ─── Chart Panel ────────────────────────────────────────────── */
+.chart-panel { display: flex; flex-direction: column; gap: 14px; }
+
+.chart-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.chart-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.chart-panel-icon { font-size: 1.2rem; }
+
+.chart-panel-reasoning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.chart-panel-reasoning svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-secondary); }
+
 .chart-container {
   width: 100%;
-  height: 440px;
+  height: 380px;
   position: relative;
+}
+
+/* ─── Data Panel ─────────────────────────────────────────────── */
+.data-panel { display: flex; flex-direction: column; gap: 14px; }
+
+.data-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-glass);
 }
 
 /* ─── Data Table ─────────────────────────────────────────────── */
@@ -594,8 +716,9 @@ body::before {
   .panel-header { flex-direction: column; align-items: flex-start; }
   .rec-banner { flex-direction: column; gap: 12px; }
   .tab-content { padding: 16px; }
-  .chart-container { height: 300px; }
+  .chart-container { height: 280px; }
   .schema-fields { grid-template-columns: 1fr; }
-  .tabs { width: 100%; }
-  .tab-btn { flex: 1; justify-content: center; }
+  .tabs-wrapper { gap: 6px; }
+  .tabs-divider { display: none; }
+  .tab-btn { padding: 6px 10px; font-size: 0.75rem; }
 }

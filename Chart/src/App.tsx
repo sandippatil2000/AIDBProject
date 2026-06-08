@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { BarChart3, Brain, Table2, AlertCircle, Sparkles, ChevronDown } from 'lucide-react';
+import { Brain, Table2, AlertCircle, Sparkles, DatabaseZap, LayoutList } from 'lucide-react';
 import { inferSchema } from './utils/schemaInference';
-import { recommendChart } from './utils/chartRecommender';
+import { recommendCharts } from './utils/chartRecommender';
 import { buildChartConfig } from './utils/chartDataBuilder';
 import DynamicChart from './components/DynamicChart';
 import DataTable from './components/DataTable';
@@ -43,17 +43,34 @@ const SAMPLES: Record<string, string> = {
   ),
 };
 
-type ActiveTab = 'table' | 'schema' | 'chart';
+interface ChartConfig {
+  recommendation: ChartRecommendation;
+  chartData: ChartData;
+  chartOptions: ChartOptions;
+}
+
+const CHART_META: Record<string, { icon: string; label: string }> = {
+  bar:       { icon: '📊', label: 'Bar' },
+  line:      { icon: '📈', label: 'Line' },
+  area:      { icon: '🏔️', label: 'Area' },
+  pie:       { icon: '🥧', label: 'Pie' },
+  doughnut:  { icon: '🍩', label: 'Doughnut' },
+  radar:     { icon: '🕸️', label: 'Radar' },
+  polarArea: { icon: '🎯', label: 'Polar' },
+  bubble:    { icon: '🫧', label: 'Bubble' },
+  scatter:   { icon: '✨', label: 'Scatter' },
+  mixed:     { icon: '🎨', label: 'Mixed' },
+};
+
+type SpecialTab = 'table' | 'schema';
 
 const App: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>(SAMPLES.Sales);
-  const [activeTab, setActiveTab] = useState<ActiveTab>('table');
+  const [activeTab, setActiveTab] = useState<string>('table'); // chartType string OR 'table'/'schema'
   const [error, setError] = useState<string | null>(null);
   const [parsed, setParsed] = useState<Record<string, unknown>[] | null>(null);
   const [schema, setSchema] = useState<JsonSchema | null>(null);
-  const [recommendation, setRecommendation] = useState<ChartRecommendation | null>(null);
-  const [chartData, setChartData] = useState<ChartData | null>(null);
-  const [chartOptions, setChartOptions] = useState<ChartOptions | null>(null);
+  const [chartConfigs, setChartConfigs] = useState<ChartConfig[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const analyse = useCallback(() => {
@@ -67,15 +84,18 @@ const App: React.FC = () => {
           throw new Error('Input must be a non-empty JSON array of objects.');
         }
         const inferredSchema = inferSchema(data);
-        const rec = recommendChart(inferredSchema);
-        const { chartData: cd, chartOptions: co } = buildChartConfig(data, inferredSchema, rec);
+        const recs = recommendCharts(inferredSchema);
+
+        const configs: ChartConfig[] = recs.map((rec) => {
+          const { chartData, chartOptions } = buildChartConfig(data, inferredSchema, rec);
+          return { recommendation: rec, chartData, chartOptions };
+        });
 
         setParsed(data);
         setSchema(inferredSchema);
-        setRecommendation(rec);
-        setChartData(cd);
-        setChartOptions(co);
-        setActiveTab('chart');
+        setChartConfigs(configs);
+        // Default to the first (best) chart tab
+        setActiveTab(configs[0]?.recommendation.chartType ?? 'table');
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Invalid JSON');
       } finally {
@@ -88,33 +108,27 @@ const App: React.FC = () => {
     setJsonInput(SAMPLES[name]);
     setParsed(null);
     setSchema(null);
-    setRecommendation(null);
-    setChartData(null);
+    setChartConfigs([]);
     setError(null);
   };
 
-  const chartTypeIcon = (type: string) => {
-    const icons: Record<string, string> = {
-      bar: '📊', line: '📈', area: '🏔️', pie: '🥧', doughnut: '🍩',
-      radar: '🕸️', polarArea: '🎯', bubble: '🫧', scatter: '✨', mixed: '🎨',
-    };
-    return icons[type] ?? '📊';
-  };
+  const activeConfig = chartConfigs.find((c) => c.recommendation.chartType === activeTab);
+  const bestRec = chartConfigs[0]?.recommendation;
 
   return (
     <div className="app">
-      {/* ── Header ─────────────────────────────────────────────── */}
+      {/* ── Header ────────────────────────────────────────────────── */}
       <header className="app-header">
         <div className="header-brand">
           <div className="brand-icon"><Sparkles size={22} /></div>
           <span className="brand-name">ChartAI</span>
           <span className="brand-sub">Smart Data Visualiser</span>
         </div>
-        <p className="header-tagline">Paste any JSON → Get instant AI-powered charts</p>
+        <p className="header-tagline">Paste any JSON → AI infers schema → Renders all supported charts</p>
       </header>
 
       <main className="app-main">
-        {/* ── Input Panel ───────────────────────────────────────── */}
+        {/* ── Input Panel ──────────────────────────────────────────── */}
         <section className="input-panel glass-card">
           <div className="panel-header">
             <h2>JSON Data Input</h2>
@@ -161,61 +175,119 @@ const App: React.FC = () => {
             ) : (
               <>
                 <Brain size={18} />
-                <span>Analyse & Visualise</span>
+                <span>Analyse &amp; Visualise</span>
               </>
             )}
           </button>
         </section>
 
-        {/* ── Results Panel ─────────────────────────────────────── */}
-        {parsed && schema && recommendation && (
+        {/* ── Results Panel ─────────────────────────────────────────── */}
+        {parsed && schema && chartConfigs.length > 0 && (
           <section className="results-panel">
-            {/* Recommendation Banner */}
+
+            {/* ── Summary Banner ─────────────────────────────────────── */}
             <div className="rec-banner glass-card">
-              <div className="rec-icon">{chartTypeIcon(recommendation.chartType)}</div>
+              <div className="rec-icon">{CHART_META[bestRec.chartType]?.icon ?? '📊'}</div>
               <div className="rec-content">
                 <div className="rec-top">
-                  <span className="rec-type">{recommendation.chartType.toUpperCase()} CHART</span>
+                  <span className="rec-type">
+                    {chartConfigs.length} Chart{chartConfigs.length > 1 ? ' Types' : ' Type'} Supported
+                  </span>
                   <span className="rec-domain">{schema.domain}</span>
+                  <span className="rec-rows">{schema.rowCount} rows · {schema.fields.length} fields</span>
                 </div>
-                <h3 className="rec-title">{recommendation.title}</h3>
-                <p className="rec-reasoning">
-                  <Brain size={13} />
-                  {recommendation.reasoning}
-                </p>
+                <h3 className="rec-title">{bestRec.title}</h3>
+                <div className="rec-badges">
+                  {chartConfigs.map((c, i) => (
+                    <span
+                      key={c.recommendation.chartType}
+                      className={`chart-badge ${i === 0 ? 'chart-badge--best' : ''}`}
+                    >
+                      {CHART_META[c.recommendation.chartType]?.icon}{' '}
+                      {CHART_META[c.recommendation.chartType]?.label}
+                      {i === 0 && <span className="badge-star">★ Best</span>}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="tabs">
-              {(['chart', 'table', 'schema'] as ActiveTab[]).map((tab) => {
-                const icons = { chart: <BarChart3 size={15} />, table: <Table2 size={15} />, schema: <ChevronDown size={15} /> };
-                return (
-                  <button
-                    key={tab}
-                    className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {icons[tab]}
-                    <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
-                  </button>
-                );
-              })}
+            {/* ── Tab Bar ─────────────────────────────────────────────── */}
+            <div className="tabs-wrapper">
+              {/* Chart type tabs */}
+              <div className="tabs tabs--charts">
+                <span className="tabs-section-label">Charts</span>
+                {chartConfigs.map((c, i) => {
+                  const meta = CHART_META[c.recommendation.chartType];
+                  return (
+                    <button
+                      key={c.recommendation.chartType}
+                      className={`tab-btn tab-btn--chart ${activeTab === c.recommendation.chartType ? 'active' : ''} ${i === 0 ? 'tab-btn--best' : ''}`}
+                      onClick={() => setActiveTab(c.recommendation.chartType)}
+                      title={c.recommendation.reasoning}
+                    >
+                      <span className="tab-icon">{meta?.icon}</span>
+                      <span>{meta?.label}</span>
+                      {i === 0 && <span className="tab-star">★</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Data tabs separator */}
+              <div className="tabs-divider" />
+
+              {/* Table / Schema tabs */}
+              <div className="tabs tabs--data">
+                <span className="tabs-section-label">Data</span>
+                {(['table', 'schema'] as SpecialTab[]).map((tab) => {
+                  const icons = { table: <Table2 size={14} />, schema: <DatabaseZap size={14} /> };
+                  return (
+                    <button
+                      key={tab}
+                      className={`tab-btn tab-btn--data ${activeTab === tab ? 'active' : ''}`}
+                      onClick={() => setActiveTab(tab)}
+                    >
+                      {icons[tab]}
+                      <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Tab Content */}
+            {/* ── Tab Content ─────────────────────────────────────────── */}
             <div className="tab-content glass-card">
-              {activeTab === 'chart' && chartData && chartOptions && (
-                <div className="chart-container">
-                  <DynamicChart
-                    chartType={recommendation.chartType}
-                    chartData={chartData}
-                    chartOptions={chartOptions}
-                  />
+              {/* Active chart tab */}
+              {activeConfig && (
+                <div className="chart-panel">
+                  <div className="chart-panel-header">
+                    <div className="chart-panel-title">
+                      <span className="chart-panel-icon">{CHART_META[activeConfig.recommendation.chartType]?.icon}</span>
+                      <span>{activeConfig.recommendation.title}</span>
+                    </div>
+                    <p className="chart-panel-reasoning">
+                      <Brain size={12} />
+                      {activeConfig.recommendation.reasoning}
+                    </p>
+                  </div>
+                  <div className="chart-container">
+                    <DynamicChart
+                      chartType={activeConfig.recommendation.chartType}
+                      chartData={activeConfig.chartData}
+                      chartOptions={activeConfig.chartOptions}
+                    />
+                  </div>
                 </div>
               )}
               {activeTab === 'table' && (
-                <DataTable data={parsed} fields={schema.fields} />
+                <div className="data-panel">
+                  <div className="data-panel-header">
+                    <LayoutList size={16} />
+                    <span>Data Table — {parsed.length} rows</span>
+                  </div>
+                  <DataTable data={parsed} fields={schema.fields} />
+                </div>
               )}
               {activeTab === 'schema' && (
                 <SchemaView
