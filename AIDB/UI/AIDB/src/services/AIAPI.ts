@@ -1,5 +1,6 @@
 import type { AIChatRequest } from '../types/AIChatRequest';
 import type { AIQueryRequest } from '../types/AIQueryRequest';
+import type { AIRecommendChartsRequest } from '../types/AIRecommendChartsRequest';
 import { apiClient } from './api';
 
 // ── API service ───────────────────────────────────────────────────────────────
@@ -21,5 +22,14 @@ export const AIAPI = {
      */
     chat: async (request: AIChatRequest) => {
         return apiClient.post<string>('/AI/chat', request);
+    },
+
+    /**
+     * POST /api/AI/RecommendCharts
+     * Sends dataset schema metadata to the AI service and returns a list of
+     * recommended chart configurations suited to the given data structure.
+     */
+    AIrecommendCharts: async (request: AIRecommendChartsRequest) => {
+        return apiClient.post<string>('/AI/RecommendCharts', request);
     },
 };

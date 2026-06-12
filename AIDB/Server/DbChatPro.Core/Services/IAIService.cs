@@ -13,5 +13,6 @@ namespace DBChatPro.Services
     {
         public  Task<AIQuery> GetAISQLQuery(string aiModel, string aiService, string userPrompt, DatabaseSchema dbSchema, string databaseType);
         public Task<ChatResponse> ChatPrompt(List<ChatMessage> prompt, string aiModel, string aiService);
+        public  Task<List<ChartRecommendation>> RecommendChartsAI(string aiModel, string aiService, List<ColumnSchema> schema, string title);
     }
 }

@@ -43,16 +43,14 @@ export function inferSchema(data: Record<string, unknown>[]): JsonSchema {
   const fields: FieldSchema[] = keys.map((key) => {
     const values = data.map((row) => row[key]);
     const type = detectFieldType(values);
-    const uniqueCount = new Set(values.map(String)).size;
-
     return {
       key,
       label: toLabel(key),
       type,
+      isString: type === 'categorical' || type === 'string',
       isNumeric: type === 'number',
       isDate: type === 'date',
       isCategorical: type === 'categorical' || type === 'string',
-      uniqueCount,
       sampleValues: values.slice(0, 5),
     };
   });

@@ -7,7 +7,6 @@ export interface FieldSchema {
   isNumeric: boolean;
   isDate: boolean;
   isCategorical: boolean;
-  uniqueCount: number;
   sampleValues: unknown[];
 }
 

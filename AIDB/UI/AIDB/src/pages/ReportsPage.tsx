@@ -18,6 +18,8 @@ import {
   Tabs,
   Tab,
   Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
   useTheme,
 } from '@mui/material';
 import {
@@ -27,6 +29,8 @@ import {
   TableChart as TableChartIcon,
   AccountTree as AccountTreeIcon,
   Psychology as PsychologyIcon,
+  AutoAwesome as AutoAwesomeIcon,
+  TuneOutlined as TuneOutlinedIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -43,6 +47,7 @@ import DynamicChart from '../components/DynamicChart';
 import SchemaView from '../components/SchemaView';
 import type { JsonSchema, ChartRecommendation } from '../types/schema';
 import type { ChartData, ChartOptions } from 'chart.js';
+import type { AIRecommendChartsRequest } from '../types/AIRecommendChartsRequest';
 
 // ─── Chart config type ────────────────────────────────────────────────────────
 interface ChartConfig {
@@ -87,6 +92,7 @@ export const ReportsPage = () => {
   const [chartActiveTab, setChartActiveTab] = useState<string>('table');
   const [chartError, setChartError] = useState<string | null>(null);
   const [chartIsAnalyzing, setChartIsAnalyzing] = useState(false);
+  const [chartRecommendationMode, setChartRecommendationMode] = useState<'algorithm' | 'ai'>('algorithm');
 
   // ── Fetch connections ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -106,18 +112,52 @@ export const ReportsPage = () => {
   const analyseDataTable = useCallback((rows: Record<string, unknown>[]) => {
     setChartError(null);
     setChartIsAnalyzing(true);
-    setTimeout(() => {
+
+    const run = async () => {
       try {
         if (!Array.isArray(rows) || rows.length === 0)
           throw new Error('Query returned no data to visualise.');
         const data = convertToJSON(rows);
         const inferredSchema = inferSchema(data);
-        const recs = recommendCharts(inferredSchema);
+
+        let recs: ChartRecommendation[];
+
+        if (chartRecommendationMode === 'ai') {
+          // ── AI-powered chart recommendation ────────────────────────────
+          const request: AIRecommendChartsRequest = {
+            aiService: selectedAiService || undefined,
+            aiModel: selectedAiModel || undefined,
+            title: inferredSchema.domain || 'Chart Recommendations',
+            schema: inferredSchema.fields.map((f) => ({
+              key: f.key,
+              type: f.type,
+              isString: f.type === 'string',
+              isNumeric: f.isNumeric,
+              isDate: f.isDate,
+              isCategorical: f.isCategorical,
+            })),
+          };
+          console.log("request ", JSON.stringify(request));
+          const response = await AIAPI.AIrecommendCharts(request);
+          const raw: string =
+            typeof response === 'string'
+              ? response
+              : (response as any)?.data ?? JSON.stringify(response);
+          // Parse AI response — expected to be a JSON array of ChartRecommendation
+          const cleaned = raw.trim().replace(/^```json\s*/i, '').replace(/```\s*$/, '');
+          const parsed = JSON.parse(cleaned) as ChartRecommendation | ChartRecommendation[];
+          recs = Array.isArray(parsed) ? parsed : [parsed];
+        } else {
+          // ── Algorithm-based chart recommendation ───────────────────────
+          await new Promise<void>((resolve) => setTimeout(resolve, 400));
+          recs = recommendCharts(inferredSchema);
+        }
+
         const configs: ChartConfig[] = recs.map((rec) => {
           const { chartData, chartOptions } = buildChartConfig(data, inferredSchema, rec);
           return { recommendation: rec, chartData, chartOptions };
         });
-        console.log(JSON.stringify(data))
+
         setChartParsed(rows);
         setChartSchema(inferredSchema);
         setChartConfigs(configs);
@@ -128,8 +168,10 @@ export const ReportsPage = () => {
       } finally {
         setChartIsAnalyzing(false);
       }
-    }, 400);
-  }, []);
+    };
+
+    run();
+  }, [chartRecommendationMode, selectedAiService, selectedAiModel]);
 
   function convertToJSON(data: Record<string, unknown>[]): Record<string, unknown>[] {
     if (data.length < 2) {
@@ -675,6 +717,7 @@ export const ReportsPage = () => {
         </Card>
       )}
 
+
       {/* ── Chart Visualisation Panel ─────────────────────────────────────────── */}
       {hasSubmitted && !isLoading && (
         <Card
@@ -694,6 +737,8 @@ export const ReportsPage = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 1.5,
               borderBottom: '1px solid',
               borderColor: 'divider',
               background: (t) =>
@@ -702,12 +747,69 @@ export const ReportsPage = () => {
                   : 'rgba(248,250,252,0.8)',
             }}
           >
+            {/* Title + spinner */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Typography variant="subtitle1" fontWeight={700} color="text.primary">
                 Chart Visualisation
               </Typography>
               {chartIsAnalyzing && <CircularProgress size={16} />}
             </Box>
+
+            {/* Chart Recommendation toggle */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Typography
+                variant="caption"
+                fontWeight={700}
+                color="text.secondary"
+                sx={{ textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}
+              >
+                Chart Recommendation
+              </Typography>
+              <ToggleButtonGroup
+                value={chartRecommendationMode}
+                exclusive
+                size="small"
+                onChange={(_, val) => { if (val !== null) setChartRecommendationMode(val); }}
+                sx={{
+                  '& .MuiToggleButton-root': {
+                    borderRadius: '8px !important',
+                    px: 1.5,
+                    py: 0.4,
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    gap: 0.6,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                  },
+                  '& .MuiToggleButton-root.Mui-selected': {
+                    background: (t) =>
+                      t.palette.mode === 'dark'
+                        ? 'rgba(25,118,210,0.22) !important'
+                        : 'rgba(25,118,210,0.12) !important',
+                    color: 'primary.main',
+                    borderColor: 'primary.main',
+                    fontWeight: 700,
+                  },
+                  '& .MuiToggleButtonGroup-grouped': {
+                    marginLeft: 0,
+                    borderLeft: '1px solid !important',
+                    borderLeftColor: 'divider !important',
+                  },
+                }}
+              >
+                <ToggleButton value="algorithm" id="chart-mode-algorithm">
+                  <TuneOutlinedIcon sx={{ fontSize: 14 }} />
+                  Algorithm Chart
+                </ToggleButton>
+                <ToggleButton value="ai" id="chart-mode-ai">
+                  <AutoAwesomeIcon sx={{ fontSize: 14 }} />
+                  AI Chart
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
+
+            {/* Chart count chip
             {chartConfigs.length > 0 && (
               <Chip
                 label={`${chartConfigs.length} Chart${chartConfigs.length > 1 ? ' Types' : ' Type'}`}
@@ -716,7 +818,7 @@ export const ReportsPage = () => {
                 variant="outlined"
                 sx={{ fontWeight: 600, borderRadius: 1.5 }}
               />
-            )}
+            )} */}
           </Box>
 
           <CardContent sx={{ p: 0 }}>

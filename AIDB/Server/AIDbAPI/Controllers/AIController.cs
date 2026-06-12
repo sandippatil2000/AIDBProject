@@ -107,7 +107,31 @@ namespace AIDbAPI.Controllers
                 return StatusCode(500, $"AI service error: {ex.Message}");
             }
         }
+    
+
+    /// <summary>
+        /// Sends a free-form chat prompt to the AI service and returns the response.
+        /// </summary>
+        /// <remarks>
+        /// POST /api/AI/chat
+        /// </remarks>
+        [HttpPost("RecommendCharts")]
+        public async Task<IActionResult> RecommendCharts([FromBody] AIRecommendChartsRequest request)
+        {
+            if (request == null )
+                return BadRequest("At least one chat message is required.");
+
+            try
+            {
+            
+                var response = await _aiService.RecommendChartsAI(request.AiModel,request.AiService, request.Schema, request.Title);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"AI service error: {ex.Message}");
+            }
+        }
     }
 
-     
 }

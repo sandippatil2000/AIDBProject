@@ -1,16 +1,18 @@
 ﻿using Amazon.BedrockRuntime;
-using Azure.AI.Inference;
+using Amazon.BedrockRuntime.Model;
 using Azure;
+using Azure.AI.Inference;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using DBChatPro.Models;
 using Microsoft.Extensions.AI;
-using OpenAI;
-using System.Text;
-using System.Text.Json;
-using System.ClientModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ModelContextProtocol.Protocol;
+using OpenAI;
+using System.ClientModel;
+using System.Text;
+using System.Text.Json;
 
 namespace DBChatPro.Services
 {
@@ -109,5 +111,41 @@ namespace DBChatPro.Services
 
             return (await aiClient.GetResponseAsync(prompt));
         }
+
+
+        public async Task<List<ChartRecommendation>> RecommendChartsAI(string aiModel, string aiService, List<ColumnSchema> schema, string title)
+        {
+            if (aiClient == null)
+            {
+                aiClient = CreateChatClient(aiModel, aiService);
+            }
+            string schemaJson = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
+
+            string prompt = $@"
+                You are an expert in Chart.js visualization.
+                Given a JSON schema with column names, datatypes, and flags (IsString, IsNumeric, IsDate), recommend suitable chart types.
+                Return recommendations as JSON array of ChartRecommendation objects:
+                [{{
+                  ChartType: string;
+                  LabelField: string;
+                  ValueFields: string[];
+                  Title: string;
+                  Reasoning: string;
+                }}]
+                Schema:
+                {schemaJson}
+
+                Title: {title}
+                ";
+
+            var response = await aiClient.GetResponseAsync(prompt);
+
+
+            string text = response.Messages[0].Text;
+
+            return JsonSerializer.Deserialize<List<ChartRecommendation>>(text) ?? new List<ChartRecommendation>();
+        }
     }
 }
+    
+
