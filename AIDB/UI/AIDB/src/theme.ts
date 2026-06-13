@@ -75,6 +75,40 @@ const theme = createTheme({
         },
       },
     },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableCell-head': {
+            backgroundColor: '#1976d2',       // primary.main
+            color: '#ffffff',                  // primary.contrastText
+            fontWeight: 700,
+            fontSize: '0.78rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            whiteSpace: 'nowrap',
+            borderBottom: '2px solid #004ba0', // primary.dark
+          },
+        },
+      },
+    },
+    MuiTableBody: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableRow-root:nth-of-type(even)': {
+            backgroundColor: '#f0f7ff',        // light primary tint
+          },
+          '& .MuiTableRow-root:hover': {
+            backgroundColor: '#e3f2fd !important', // secondary.main on hover
+          },
+          '& .MuiTableCell-body': {
+            color: '#1E293B',                  // text.primary
+            fontSize: '0.875rem',
+            borderColor: '#e2e8f0',
+            whiteSpace: 'nowrap',
+          },
+        },
+      },
+    },
   },
 });
 
