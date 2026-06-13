@@ -1,4 +1,4 @@
-import type { ChartRecommendation, ChartType, JsonSchema } from '../types/schema';
+import type { ChartRecommendation, ChartType, JsonSchema } from '../types/Schema';
 
 interface Rule {
   id: ChartType;

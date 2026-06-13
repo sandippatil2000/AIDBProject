@@ -233,9 +233,8 @@ export const Sidebar = ({ open, onClose, variant = 'permanent' }: SidebarProps) 
         {/* Label fades out in mini mode */}
         <Typography
           variant="h6"
-          fontWeight={700}
           color="primary.main"
-          letterSpacing={0.5}
+
           sx={{
             opacity: isMini ? 0 : 1,
             width: isMini ? 0 : 'auto',
@@ -244,6 +243,8 @@ export const Sidebar = ({ open, onClose, variant = 'permanent' }: SidebarProps) 
             transition: theme.transitions.create(['opacity', 'width'], {
               duration: theme.transitions.duration.enteringScreen,
             }),
+            fontWeight: 700,
+            letterSpacing: 0.5
           }}
         >
           AIDB

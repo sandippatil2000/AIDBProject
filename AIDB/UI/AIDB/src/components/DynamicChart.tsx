@@ -16,7 +16,7 @@ import {
 } from 'chart.js';
 import { Bar, Line, Pie, Doughnut, Radar, PolarArea, Bubble, Scatter } from 'react-chartjs-2';
 import type { ChartData, ChartOptions } from 'chart.js';
-import type { ChartType } from '../types/schema';
+import type { ChartType } from '../types/Schema';
 
 ChartJS.register(
   CategoryScale,
