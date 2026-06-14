@@ -16,11 +16,11 @@ namespace DbChatPro.Core.Data
                 new AIConnection
                 {
                     id = 1,
-                    Name = "Production DB (Primary)",
+                    Name = "Adventure Works",
                     databaseType = "MSSQL",
-                    host = "db-prod.aidb.internal",
+                    host = "localhost",
                     port = 5432,
-                    database = "aidb_main",
+                    database = "AdventureWorks2025",
                     status = "connected",
                     lastPing = "2 mins ago",
                     connectionString = "Data Source=ADMIN;Initial Catalog=AdventureWorks2025;Persist Security Info=True;User ID=sa;Password=sa123;Encrypt=True;Trust Server Certificate=True"
@@ -33,21 +33,21 @@ namespace DbChatPro.Core.Data
                     host = "analytics.snowflakecomputing.com",
                     port = 443,
                     database = "ANALYTICS_DB",
-                    status = "connected",
+                    status = "offline",
                     lastPing = "1 hr ago",
                     connectionString = ""
                 },
                 new AIConnection
                 {
                     id = 3,
-                    Name = "POSTGRESQL",
+                    Name = "dvd Rental",
                     databaseType = "POSTGRESQL",
                     host = "10.0.1.45",
                     port = 3306,
-                    database = "old_crm",
-                    status = "offline",
+                    database = "dvdrental",
+                    status = "connected",
                     lastPing = "2 days ago",
-                    connectionString = ""
+                    connectionString = "Host=localhost;Port=5432;Database=dvdrental;Username=postgres;Password=Pune@123;"
                 },
                 new AIConnection
                 {

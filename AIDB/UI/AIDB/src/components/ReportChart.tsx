@@ -23,6 +23,7 @@ import {
   Psychology as PsychologyIcon,
   AutoAwesome as AutoAwesomeIcon,
   TuneOutlined as TuneOutlinedIcon,
+  ShowChart as ShowChartIcon,
 } from '@mui/icons-material';
 import DynamicChart from './DynamicChart';
 import SchemaView from './SchemaView';
@@ -115,61 +116,103 @@ const ReportChart: React.FC<ReportChartProps> = ({
       >
         {/* Title + spinner */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <ShowChartIcon
+            sx={{
+              fontSize: 18,
+              color: 'primary.main',
+              opacity: 0.85,
+            }}
+          />
           <Typography variant="subtitle1" color="text.primary" sx={{ fontWeight: 700 }}>
             Chart Visualisation
           </Typography>
           {chartIsAnalyzing && <CircularProgress size={16} />}
         </Box>
 
-        {/* Chart Recommendation toggle */}
+        {/* Chart Recommendation toggle — pill switcher */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          {/* Label */}
           <Typography
             variant="caption"
             color="text.secondary"
-            sx={{ textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap', fontWeight: 700 }}
+            sx={{
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              whiteSpace: 'nowrap',
+              fontWeight: 700,
+              fontSize: '0.68rem',
+            }}
           >
-            Chart Recommendation
+            Recommendation
           </Typography>
+
+          {/* Pill-track container */}
           <ToggleButtonGroup
             value={chartRecommendationMode}
             exclusive
             size="small"
             onChange={(_, val) => { if (val !== null) onRecommendationModeChange(val); }}
-            sx={{
+            sx={(t) => ({
+              // Sunken pill track
+              background:
+                t.palette.mode === 'dark'
+                  ? 'rgba(0,0,0,0.30)'
+                  : 'rgba(0,0,0,0.06)',
+              border: `1px solid ${t.palette.divider}`,
+              borderRadius: '50px',
+              padding: '3px',
+              gap: '2px',
+              // Remove the default MUI divider line between buttons
+              '& .MuiToggleButtonGroup-grouped': {
+                border: 'none !important',
+                margin: 0,
+              },
+              // Base button style
               '& .MuiToggleButton-root': {
-                borderRadius: '8px !important',
-                px: 1.5,
-                py: 0.4,
-                fontSize: '0.75rem',
+                borderRadius: '50px !important',
+                px: 1.6,
+                py: 0.45,
+                fontSize: '0.73rem',
                 fontWeight: 600,
                 textTransform: 'none',
-                gap: 0.6,
-                border: '1px solid',
-                borderColor: 'divider',
+                letterSpacing: '0.02em',
+                gap: 0.7,
+                color: t.palette.text.secondary,
+                border: 'none',
+                transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  background:
+                    t.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.07)'
+                      : 'rgba(0,0,0,0.05)',
+                  color: t.palette.text.primary,
+                },
               },
+              // Active (selected) button — elevated pill
               '& .MuiToggleButton-root.Mui-selected': {
-                background: (t) =>
+                background:
                   t.palette.mode === 'dark'
-                    ? 'rgba(25,118,210,0.22) !important'
-                    : 'rgba(25,118,210,0.12) !important',
-                color: 'primary.main',
-                borderColor: 'primary.main',
+                    ? `linear-gradient(135deg, ${t.palette.primary.dark} 0%, ${t.palette.primary.main} 100%) !important`
+                    : `linear-gradient(135deg, ${t.palette.primary.main} 0%, ${t.palette.primary.light} 100%) !important`,
+                color: `${t.palette.primary.contrastText} !important`,
                 fontWeight: 700,
+                boxShadow:
+                  t.palette.mode === 'dark'
+                    ? '0 2px 10px rgba(25,118,210,0.45), 0 1px 3px rgba(0,0,0,0.4)'
+                    : '0 2px 10px rgba(25,118,210,0.30), 0 1px 3px rgba(0,0,0,0.15)',
+                '&:hover': {
+                  filter: 'brightness(1.08)',
+                },
               },
-              '& .MuiToggleButtonGroup-grouped': {
-                marginLeft: 0,
-                borderLeft: '1px solid !important',
-                borderLeftColor: 'divider !important',
-              },
-            }}
+            })}
           >
-            <ToggleButton value="algorithm" id="chart-mode-algorithm">
-              <TuneOutlinedIcon sx={{ fontSize: 14 }} />
-              Algorithm Chart
+            <ToggleButton value="algorithm" id="chart-mode-algorithm" disableRipple={false}>
+              <TuneOutlinedIcon sx={{ fontSize: 13 }} />
+              Algorithm
             </ToggleButton>
-            <ToggleButton value="ai" id="chart-mode-ai">
-              <AutoAwesomeIcon sx={{ fontSize: 14 }} />
-              AI Chart
+            <ToggleButton value="ai" id="chart-mode-ai" disableRipple={false}>
+              <AutoAwesomeIcon sx={{ fontSize: 13 }} />
+              AI
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>

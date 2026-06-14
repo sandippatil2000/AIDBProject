@@ -3,11 +3,11 @@ import type { Connection } from '../types/Connection';
 export const mockConnections: Connection[] = [
     {
         id: 1,
-        name: 'Production DB (Primary)',
+        name: 'Adventure Works',
         databaseType: DBTypes.MSSQL,
         host: 'db-prod.aidb.internal',
         port: 5432,
-        database: 'aidb_main',
+        database: 'AdventureWorks2025',
         status: 'connected',
         lastPing: '2 mins ago',
         connectionString: ""

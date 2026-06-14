@@ -26,6 +26,10 @@ import {
   BarChart as BarChartIcon,
   Send as SendIcon,
   Storage as StorageIcon,
+  Assessment as AssessmentIcon,
+  Notes as NotesIcon,
+  Code as CodeIcon,
+  TableRows as TableRowsIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -339,7 +343,7 @@ export const ReportsPage = () => {
                   <MenuItem key={conn.id ?? conn.name} value={conn.name}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <StorageIcon sx={{ fontSize: 12, color: 'primary.main', opacity: 0.9 }} />
-                      <Typography variant="body2" fontWeight={400}>{conn.name}</Typography>
+                      <Typography variant="body2" fontWeight={400}>{conn.name} ({conn.databaseType})</Typography>
                     </Box>
                   </MenuItem>
                 ))}
@@ -459,9 +463,12 @@ export const ReportsPage = () => {
                     : 'rgba(248,250,252,0.8)',
               }}
             >
-              <Typography variant="subtitle1" color="text.primary" sx={{ fontWeight: 700 }}>
-                Results
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <AssessmentIcon sx={{ fontSize: 18, color: 'primary.main', opacity: 0.85 }} />
+                <Typography variant="subtitle1" color="text.primary" sx={{ fontWeight: 700 }}>
+                  Results
+                </Typography>
+              </Box>
               {result && (
                 <Chip
                   label="AI Response"
@@ -510,11 +517,14 @@ export const ReportsPage = () => {
                   {/* Summary */}
                   {result.summary && (
                     <Box>
-                      <Typography variant="caption" color="text.secondary"
-                        sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
-                      >
-                        Summary
-                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, mb: 0.5 }}>
+                        <NotesIcon sx={{ fontSize: 14, color: 'text.secondary', opacity: 0.8 }} />
+                        <Typography variant="caption" color="text.secondary"
+                          sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
+                        >
+                          Summary
+                        </Typography>
+                      </Box>
                       <Box
                         component="pre"
                         sx={{
@@ -545,11 +555,14 @@ export const ReportsPage = () => {
                   {/* SQL Query */}
                   {result.query && (
                     <Box>
-                      <Typography variant="caption" color="text.secondary"
-                        sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
-                      >
-                        Generated SQL
-                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, mb: 0.5 }}>
+                        <CodeIcon sx={{ fontSize: 14, color: 'text.secondary', opacity: 0.8 }} />
+                        <Typography variant="caption" color="text.secondary"
+                          sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
+                        >
+                          Generated SQL
+                        </Typography>
+                      </Box>
                       <Box
                         component="pre"
                         sx={{
@@ -593,11 +606,14 @@ export const ReportsPage = () => {
 
                     {/* Label row */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Typography variant="caption" color="text.secondary"
-                        sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
-                      >
-                        Data Table
-                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
+                        <TableRowsIcon sx={{ fontSize: 14, color: 'text.secondary', opacity: 0.8 }} />
+                        <Typography variant="caption" color="text.secondary"
+                          sx={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}
+                        >
+                          Data Table
+                        </Typography>
+                      </Box>
                       <Chip
                         label={`${totalRows} row${totalRows !== 1 ? 's' : ''}`}
                         size="small"
