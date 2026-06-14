@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ConnectionsPage } from './pages/ConnectionsPage';
 import { ReportsPage } from './pages/ReportsPage';
+import { SettingsPage } from './pages/SettingsPage';
 
 
 export const App = () => {
@@ -31,6 +32,7 @@ export const App = () => {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/Connections" element={<ConnectionsPage />} />
               <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
               {/* Add more protected routes here */}
             </Route>
 
