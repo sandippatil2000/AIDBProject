@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Box,
   Card,
@@ -21,6 +21,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import {
   BarChart as BarChartIcon,
@@ -30,6 +32,7 @@ import {
   Notes as NotesIcon,
   Code as CodeIcon,
   TableRows as TableRowsIcon,
+  PictureAsPdf as PdfIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -63,6 +66,11 @@ export const ReportsPage = () => {
   const [dataTable, setDataTable] = useState<{ columns: string[]; rows: Record<string, unknown>[] } | null>(null);
   const [resultError, setResultError] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+  const [isPdfExporting, setIsPdfExporting] = useState<boolean>(false);
+
+  // ── Refs for PDF export ──────────────────────────────────────────────────────
+  const dataTableRef = useRef<HTMLDivElement>(null);
+  const chartSectionRef = useRef<HTMLDivElement>(null);
 
   // ── Pagination state ───────────────────────────────────────────────────────
   const DATA_TABLE_PAGE_SIZE = 10;
@@ -270,6 +278,105 @@ export const ReportsPage = () => {
     userPrompt.trim() !== '' &&
     !isLoading;
 
+  // ── PDF Export ──────────────────────────────────────────────────────────────
+  const handleExportPdf = async () => {
+    if (isPdfExporting) return;
+    setIsPdfExporting(true);
+    try {
+      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+        import('jspdf'),
+        import('html2canvas'),
+      ]);
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 40;
+      const contentW = pageW - margin * 2;
+      let cursorY = margin;
+
+      // ── Header bar ──────────────────────────────────────────────────────────
+      pdf.setFillColor(25, 118, 210);
+      pdf.rect(0, 0, pageW, 48, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('AIDB — Report Export', margin, 32);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(new Date().toLocaleString(), pageW - margin, 32, { align: 'right' });
+      cursorY = 68;
+
+      // ── Meta row ────────────────────────────────────────────────────────────
+      pdf.setTextColor(80, 80, 80);
+      pdf.setFontSize(9);
+      // ── Divider ─────────────────────────────────────────────────────────────
+      pdf.setDrawColor(220, 220, 220);
+      pdf.line(margin, cursorY, pageW - margin, cursorY);
+      cursorY += 14;
+
+      // ── Data Table section ──────────────────────────────────────────────────
+      if (dataTableRef.current) {
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(25, 118, 210);
+        pdf.text('Data Table', margin, cursorY);
+        cursorY += 10;
+
+        const tableCanvas = await html2canvas(dataTableRef.current, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+        });
+        const tableImg = tableCanvas.toDataURL('image/png');
+        const tableRatio = tableCanvas.height / tableCanvas.width;
+        const tableImgH = Math.min(contentW * tableRatio, pageH - cursorY - margin);
+        pdf.addImage(tableImg, 'PNG', margin, cursorY, contentW, tableImgH);
+        cursorY += tableImgH + 20;
+      }
+
+      // ── Chart section ───────────────────────────────────────────────────────
+      if (chartSectionRef.current) {
+        // Start on a new page if not enough vertical space
+        if (cursorY > pageH - 200) {
+          pdf.addPage();
+          cursorY = margin;
+        }
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(25, 118, 210);
+        pdf.text('Chart Visualisation', margin, cursorY);
+        cursorY += 10;
+
+        const chartCanvas = await html2canvas(chartSectionRef.current, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+        });
+        const chartImg = chartCanvas.toDataURL('image/png');
+        const chartRatio = chartCanvas.height / chartCanvas.width;
+        const chartImgH = Math.min(contentW * chartRatio, pageH - cursorY - margin);
+        pdf.addImage(chartImg, 'PNG', margin, cursorY, contentW, chartImgH);
+      }
+
+      // ── Footer ──────────────────────────────────────────────────────────────
+      const totalPages = (pdf.internal as any).getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(160, 160, 160);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Page ${i} of ${totalPages}  —  Generated by AIDB`, pageW / 2, pageH - 16, { align: 'center' });
+      }
+
+      pdf.save(`AIDB_Report_${new Date().toISOString().slice(0, 10)}.pdf`);
+    } catch (e) {
+      console.error('PDF export failed', e);
+    } finally {
+      setIsPdfExporting(false);
+    }
+  };
+
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: '100%' }}>
@@ -471,15 +578,40 @@ export const ReportsPage = () => {
                   Results
                 </Typography>
               </Box>
-              {result && (
-                <Chip
-                  label="AI Response"
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                  sx={{ fontWeight: 600, borderRadius: 1.5 }}
-                />
-              )}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {result && (
+                  <Chip
+                    label="AI Response"
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    sx={{ fontWeight: 600, borderRadius: 1.5 }}
+                  />
+                )}
+                <Tooltip title="Export as PDF" arrow>
+                  <span>
+                    <IconButton
+                      id="export-pdf-btn"
+                      size="small"
+                      onClick={handleExportPdf}
+                      disabled={isPdfExporting || !dataTable}
+                      sx={{
+                        color: 'primary.main',
+                        border: '1px solid',
+                        borderColor: 'primary.main',
+                        borderRadius: 1.5,
+                        p: 0.75,
+                        '&:hover': { bgcolor: 'primary.main', color: '#fff' },
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {isPdfExporting
+                        ? <CircularProgress size={16} color="inherit" />
+                        : <PdfIcon sx={{ fontSize: 18 }} />}
+                    </IconButton>
+                  </span>
+                </Tooltip>
+              </Box>
             </Box>
 
             <CardContent sx={{ p: 0 }}>
@@ -604,7 +736,7 @@ export const ReportsPage = () => {
                 const dataRows = dataTable.rows.slice(1);
                 const totalRows = dataRows.length;
                 return (
-                  <Box sx={{ px: 3, pb: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Box ref={dataTableRef} sx={{ px: 3, pb: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
 
                     {/* Label row */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -722,17 +854,19 @@ export const ReportsPage = () => {
       {/* ── Chart Visualisation Panel ─────────────────────────────────────────── */}
       {
         hasSubmitted && !isLoading && (
-          <ReportChart
-            chartIsAnalyzing={chartIsAnalyzing}
-            chartError={chartError}
-            chartParsed={chartParsed}
-            chartSchema={chartSchema}
-            chartConfigs={chartConfigs}
-            chartActiveTab={chartActiveTab}
-            onTabChange={setChartActiveTab}
-            chartRecommendationMode={chartRecommendationMode}
-            onRecommendationModeChange={setChartRecommendationMode}
-          />
+          <Box ref={chartSectionRef}>
+            <ReportChart
+              chartIsAnalyzing={chartIsAnalyzing}
+              chartError={chartError}
+              chartParsed={chartParsed}
+              chartSchema={chartSchema}
+              chartConfigs={chartConfigs}
+              chartActiveTab={chartActiveTab}
+              onTabChange={setChartActiveTab}
+              chartRecommendationMode={chartRecommendationMode}
+              onRecommendationModeChange={setChartRecommendationMode}
+            />
+          </Box>
         )
       }
     </Box >
