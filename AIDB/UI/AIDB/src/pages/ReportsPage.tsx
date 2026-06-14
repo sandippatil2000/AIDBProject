@@ -347,7 +347,6 @@ export const ReportsPage = () => {
                 {connections.map((conn) => (
                   <MenuItem key={conn.id ?? conn.name} value={conn.name}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <StorageIcon sx={{ fontSize: 12, color: 'primary.main', opacity: 0.9 }} />
                       <Typography variant="body2" fontWeight={400}>{conn.name} ({conn.databaseType})</Typography>
                     </Box>
                   </MenuItem>
@@ -367,7 +366,6 @@ export const ReportsPage = () => {
                 onChange={(e) => setSelectedAiService(e.target.value)}
                 sx={{ borderRadius: 2 }}
               >
-                <MenuItem value=""><em>Default</em></MenuItem>
                 {Object.values(AiService).map((svc) => (
                   <MenuItem key={svc} value={svc}>{svc}</MenuItem>
                 ))}
@@ -386,7 +384,6 @@ export const ReportsPage = () => {
                 onChange={(e) => setSelectedAiModel(e.target.value)}
                 sx={{ borderRadius: 2 }}
               >
-                <MenuItem value=""><em>Default</em></MenuItem>
                 {Object.values(AiModel).map((mdl) => (
                   <MenuItem key={mdl} value={mdl}>{mdl}</MenuItem>
                 ))}
