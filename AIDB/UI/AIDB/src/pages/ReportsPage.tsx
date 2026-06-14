@@ -33,6 +33,7 @@ import {
   Code as CodeIcon,
   TableRows as TableRowsIcon,
   PictureAsPdf as PdfIcon,
+  FileDownload as CsvIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -375,6 +376,39 @@ export const ReportsPage = () => {
     } finally {
       setIsPdfExporting(false);
     }
+  };
+
+  // ── CSV Export ──────────────────────────────────────────────────────────────
+  const handleExportCsv = () => {
+    if (!dataTable) return;
+    const headers = dataTable.rows[0] as unknown as string[];
+    const dataRows = dataTable.rows.slice(1);
+
+    const escape = (val: unknown): string => {
+      const str = String(val ?? '');
+      // Wrap in quotes if the value contains a comma, double-quote, or newline
+      if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const csvRows: string[] = [
+      headers.map(escape).join(','),
+      ...dataRows.map((row) =>
+        (row as unknown as unknown[]).map(escape).join(',')
+      ),
+    ];
+
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `AIDB_Report_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -748,13 +782,33 @@ export const ReportsPage = () => {
                           Data Table
                         </Typography>
                       </Box>
-                      <Chip
-                        label={`${totalRows} row${totalRows !== 1 ? 's' : ''}`}
-                        size="small"
-                        color="primary"
-                        variant="outlined"
-                        sx={{ fontWeight: 600, borderRadius: 1.5 }}
-                      />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Chip
+                          label={`${totalRows} row${totalRows !== 1 ? 's' : ''}`}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                          sx={{ fontWeight: 600, borderRadius: 1.5 }}
+                        />
+                        <Tooltip title="Download as CSV (Excel)" arrow>
+                          <IconButton
+                            id="export-csv-btn"
+                            size="small"
+                            onClick={handleExportCsv}
+                            sx={{
+                              color: 'success.main',
+                              border: '1px solid',
+                              borderColor: 'success.main',
+                              borderRadius: 1.5,
+                              p: 0.6,
+                              '&:hover': { bgcolor: 'success.main', color: '#fff' },
+                              transition: 'all 0.2s',
+                            }}
+                          >
+                            <CsvIcon sx={{ fontSize: 16 }} />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
                     </Box>
 
                     {/* Table panel — same border/bg as Summary & Generated SQL */}
