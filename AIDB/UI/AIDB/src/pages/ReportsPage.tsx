@@ -215,7 +215,7 @@ export const ReportsPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!selectedDb || !userPrompt.trim()) return;
+    if (!selectedDb || !selectedAiService || !selectedAiModel || !userPrompt.trim()) return;
 
     setIsLoading(true);
     setResult(null);
@@ -263,7 +263,12 @@ export const ReportsPage = () => {
     }
   };
 
-  const canSubmit = selectedDb !== '' && userPrompt.trim() !== '' && !isLoading;
+  const canSubmit =
+    selectedDb !== '' &&
+    selectedAiService !== '' &&
+    selectedAiModel !== '' &&
+    userPrompt.trim() !== '' &&
+    !isLoading;
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
@@ -322,7 +327,7 @@ export const ReportsPage = () => {
           <Box sx={{ display: 'flex', gap: 2, mb: 2.5, flexWrap: 'wrap' }}>
 
             {/* DB Name */}
-            <FormControl sx={{ width: '25%', minWidth: 200 }}>
+            <FormControl sx={{ width: '25%', minWidth: 200 }} required>
               <InputLabel id="db-name-label" size="small">DB Name</InputLabel>
               <Select
                 labelId="db-name-label"
@@ -351,7 +356,7 @@ export const ReportsPage = () => {
             </FormControl>
 
             {/* AI Service */}
-            <FormControl sx={{ width: '20%', minWidth: 170 }}>
+            <FormControl sx={{ width: '20%', minWidth: 170 }} required>
               <InputLabel id="ai-service-label" size="small">AI Service</InputLabel>
               <Select
                 labelId="ai-service-label"
@@ -370,7 +375,7 @@ export const ReportsPage = () => {
             </FormControl>
 
             {/* AI Model */}
-            <FormControl sx={{ width: '20%', minWidth: 180 }}>
+            <FormControl sx={{ width: '20%', minWidth: 180 }} required>
               <InputLabel id="ai-model-label" size="small">AI Model</InputLabel>
               <Select
                 labelId="ai-model-label"
