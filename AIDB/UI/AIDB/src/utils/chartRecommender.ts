@@ -175,6 +175,98 @@ const RULES: Rule[] = [
       );
     },
   },
+
+  // ─── New extended chart type rules ───────────────────────────────────────
+
+  {
+    id: 'horizontalBar',
+    priority: 10,
+    // Best when there are many categories (hard to read on a vertical axis)
+    condition: (s) => numericFields(s).length >= 1 && s.rowCount >= 5,
+    recommend: (s) => {
+      const label = pickLabel(s);
+      const nums = numericFields(s);
+      return build(
+        'horizontalBar',
+        label,
+        nums.map((f) => f.key),
+        `${s.domain} Horizontal Bar`,
+        'Horizontal bars make long category labels readable and improve comparison across many items.'
+      );
+    },
+  },
+
+  {
+    id: 'stackedBar',
+    priority: 11,
+    // Best when there are multiple numeric series to show part-to-whole
+    condition: (s) => numericFields(s).length >= 2,
+    recommend: (s) => {
+      const label = pickLabel(s);
+      const nums = numericFields(s);
+      return build(
+        'stackedBar',
+        label,
+        nums.map((f) => f.key),
+        `${s.domain} Stacked Bar`,
+        'Stacked bars show how individual series contribute to an aggregate total across categories.'
+      );
+    },
+  },
+
+  {
+    id: 'comboBarLine',
+    priority: 12,
+    // Requires at least 2 numeric fields so bars and lines can use different fields
+    condition: (s) => numericFields(s).length >= 2,
+    recommend: (s) => {
+      const label = pickLabel(s);
+      const nums = numericFields(s);
+      return build(
+        'comboBarLine',
+        label,
+        nums.map((f) => f.key),
+        `${s.domain} Combo Bar / Line`,
+        'Combo chart overlays bar and line series to compare volume (bars) with trend (lines) on the same canvas.'
+      );
+    },
+  },
+
+  {
+    id: 'multiAxisLine',
+    priority: 13,
+    // Needs time + at least 2 numeric fields with potentially different scales
+    condition: (s) => numericFields(s).length >= 2,
+    recommend: (s) => {
+      const label = pickLabel(s);
+      const nums = numericFields(s);
+      return build(
+        'multiAxisLine',
+        label,
+        nums.map((f) => f.key),
+        `${s.domain} Multi-Axis Line`,
+        'Dual Y-axis line chart lets you compare series with different units or scales without distortion.'
+      );
+    },
+  },
+
+  {
+    id: 'lineDrawTime',
+    priority: 14,
+    // Useful for time-based filled area charts with controlled layer ordering
+    condition: (s) => s.fields.some((f) => f.isDate) && numericFields(s).length >= 1,
+    recommend: (s) => {
+      const dateField = s.fields.find((f) => f.isDate)!;
+      const nums = numericFields(s);
+      return build(
+        'lineDrawTime',
+        dateField.key,
+        nums.map((f) => f.key),
+        `${s.domain} Filled Line (drawTime)`,
+        'Filled line chart with Filler plugin drawTime configured to render fill layers behind datasets for a clean layered look.'
+      );
+    },
+  },
 ];
 
 /** Returns ALL chart types that are applicable, sorted by priority (most specific first). */

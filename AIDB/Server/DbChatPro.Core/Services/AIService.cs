@@ -123,7 +123,7 @@ namespace DBChatPro.Services
 
             string prompt = $@"
                 You are an expert in Chart.js visualization.
-                Given a JSON schema with column names, datatypes, and flags (IsString, IsNumeric, IsDate), recommend suitable chart types.
+                Given a JSON schema with column names, data type, and flags (IsString, IsNumeric, IsDate), recommend suitable chart types from bar, line, area, pie, doughnut, radar, polarArea, bubble, scatter, Horizontal Bar Chart,  Stacked Bar Chart, Combo bar/line, Multi Axis Line Chart, Line Chart drawTime  Chart types.
                 Return recommendations as JSON array of ChartRecommendation objects:
                 [{{
                   ChartType: string;

@@ -31,16 +31,22 @@ import type { ChartConfig } from '../types/ChartConfig';
 
 // ─── Chart meta map ────────────────────────────────────────────────────────────
 const CHART_META: Record<string, { icon: string; label: string }> = {
-  bar: { icon: '📊', label: 'Bar' },
-  line: { icon: '📈', label: 'Line' },
-  area: { icon: '🏔️', label: 'Area' },
-  pie: { icon: '🥧', label: 'Pie' },
-  doughnut: { icon: '🍩', label: 'Doughnut' },
-  radar: { icon: '🕸️', label: 'Radar' },
-  polarArea: { icon: '🎯', label: 'Polar' },
-  bubble: { icon: '🫧', label: 'Bubble' },
-  scatter: { icon: '✨', label: 'Scatter' },
-  mixed: { icon: '🎨', label: 'Mixed' },
+  bar:            { icon: '📊', label: 'Bar' },
+  line:           { icon: '📈', label: 'Line' },
+  area:           { icon: '🏔️', label: 'Area' },
+  pie:            { icon: '🥧', label: 'Pie' },
+  doughnut:       { icon: '🍩', label: 'Doughnut' },
+  radar:          { icon: '🕸️', label: 'Radar' },
+  polarArea:      { icon: '🎯', label: 'Polar' },
+  bubble:         { icon: '🫧', label: 'Bubble' },
+  scatter:        { icon: '✨', label: 'Scatter' },
+  mixed:          { icon: '🎨', label: 'Mixed' },
+  // ── New extended chart types ──────────────────────────────────────────────
+  horizontalBar:  { icon: '↔️',  label: 'H-Bar' },
+  stackedBar:     { icon: '🧱', label: 'Stacked' },
+  comboBarLine:   { icon: '🔀', label: 'Combo' },
+  multiAxisLine:  { icon: '📉', label: 'Multi-Axis' },
+  lineDrawTime:   { icon: '🎞️', label: 'DrawTime' },
 };
 
 // ─── Props ─────────────────────────────────────────────────────────────────────

@@ -26,7 +26,13 @@ export type ChartType =
   | 'bubble'
   | 'scatter'
   | 'area'
-  | 'mixed';
+  | 'mixed'
+  // ── New extended chart types ───────────────────────
+  | 'horizontalBar'   // Bar chart with indexAxis: 'y'
+  | 'stackedBar'      // Stacked bar chart
+  | 'comboBarLine'    // Mixed bar + line datasets
+  | 'multiAxisLine'   // Line chart with dual Y axes
+  | 'lineDrawTime';   // Filled line with explicit filler drawTime
 
 export interface ChartRecommendation {
   chartType: ChartType;
