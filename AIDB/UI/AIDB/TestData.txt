@@ -1,0 +1,5 @@
+1. Get top 10 customers with total revenue and mostly ordered product name and product quantity. Show only Customer Name, Total Revenue, Product Name, Product Quantity 
+2. show top 10 mostly sold products by revenue. Show only Product Name, Product Quantity, Total Revenue
+3. Show top 10 mostly sold products by revenue by Month for year 2023. 
+Show only Product Name, Product Quantity, Total Revenue, Month.
+Month should be name
