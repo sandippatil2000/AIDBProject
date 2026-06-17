@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 
-namespace DBChatPro.Models
+namespace AIDb.Core.Models
 {
     public class HistoryItem : ITableEntity
     {

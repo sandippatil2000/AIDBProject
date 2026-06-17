@@ -1,4 +1,4 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBChatPro.Services
+namespace AIDb.Core.Services
 {
     public interface IAIService
     {

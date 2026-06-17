@@ -1,11 +1,11 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 using Microsoft.Data.SqlClient;
 using Oracle.ManagedDataAccess.Types;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public class DatabaseManagerService(
         MySqlDatabaseService mySqlDb, 

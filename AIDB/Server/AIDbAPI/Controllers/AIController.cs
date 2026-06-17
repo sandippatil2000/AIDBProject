@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using DBChatPro;
-using DBChatPro.Services;
-using DBChatPro.Models;
+using AIDb.Core;
+using AIDb.Core.Services;
+using AIDb.Core.Models;
 using Microsoft.Extensions.AI;
 using AIDbAPI.Models;
 

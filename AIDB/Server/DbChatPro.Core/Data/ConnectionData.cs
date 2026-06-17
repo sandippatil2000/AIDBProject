@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBChatPro;
+using AIDb.Core;
 
-namespace DbChatPro.Core.Data
+namespace AIDb.Core.Data
 {
     public class ConnectionData
     {

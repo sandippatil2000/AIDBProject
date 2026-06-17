@@ -1,9 +1,9 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Npgsql;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public class PostgresDatabaseService : IDatabaseService
     {

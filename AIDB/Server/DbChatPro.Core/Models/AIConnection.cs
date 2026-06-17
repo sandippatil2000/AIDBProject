@@ -1,4 +1,4 @@
-﻿namespace DBChatPro
+﻿namespace AIDb.Core
 {
     public class AIConnection
     {

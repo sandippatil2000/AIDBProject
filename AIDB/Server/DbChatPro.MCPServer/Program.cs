@@ -1,7 +1,7 @@
 ﻿using DBChatPro;
 using DBChatPro.MCPServer;
-using DBChatPro.Models;
-using DBChatPro.Services;
+using AIDb.Core.Models;
+using AIDb.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +13,7 @@ using ModelContextProtocol.AspNetCore.Authentication;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
+using AIDb.Core;
 var serverUrl = "http://localhost:7071/";
 var inMemoryOAuthServerUrl = "https://localhost:7029";
 // Create a generic host builder for

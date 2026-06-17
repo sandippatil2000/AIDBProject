@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbChatPro.Core\DbChatPro.Core.csproj" />
+    <ProjectReference Include="..\DbChatPro.Core\AIDb.Core.csproj" />
   </ItemGroup>
 
 </Project>

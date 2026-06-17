@@ -1,4 +1,4 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 
 namespace AIDbAPI.Models
 {

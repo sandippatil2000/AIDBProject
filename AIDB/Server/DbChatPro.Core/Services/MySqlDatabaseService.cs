@@ -1,8 +1,8 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public class MySqlDatabaseService : IDatabaseService
     {

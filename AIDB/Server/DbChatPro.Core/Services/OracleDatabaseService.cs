@@ -1,10 +1,10 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 using Microsoft.Data.SqlClient;
 using Oracle.ManagedDataAccess.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public class OracleDatabaseService : IDatabaseService
     {

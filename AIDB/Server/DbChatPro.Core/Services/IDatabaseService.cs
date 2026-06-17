@@ -1,6 +1,6 @@
-﻿using DBChatPro.Models;
+﻿using AIDb.Core.Models;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public interface IDatabaseService
     {

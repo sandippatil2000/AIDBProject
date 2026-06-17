@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DBChatPro.Services
+namespace AIDb.Core.Services
 {
     public interface IConnectionService
     {

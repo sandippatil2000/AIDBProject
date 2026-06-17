@@ -2,7 +2,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 
-namespace DBChatPro.Services
+namespace AIDb.Core.Services
 {
     public class AzureKeyVaultConnectionService(SecretClient secretClient) : IConnectionService
     {

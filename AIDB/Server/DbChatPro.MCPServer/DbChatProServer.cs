@@ -1,9 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
-using DBChatPro.Services;
-using DBChatPro.Models;
+using AIDb.Core.Services;
+using AIDb.Core.Models;
 using ModelContextProtocol.Server;
+using AIDb.Core;
+using AIDb;
 
 // Main server class for DbChatPro MCP integration
 namespace DBChatPro.MCPServer

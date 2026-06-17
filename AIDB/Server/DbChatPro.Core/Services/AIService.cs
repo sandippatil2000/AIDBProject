@@ -4,7 +4,7 @@ using Azure;
 using Azure.AI.Inference;
 using Azure.AI.OpenAI;
 using Azure.Identity;
-using DBChatPro.Models;
+using AIDb.Core.Models;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ using System.ClientModel;
 using System.Text;
 using System.Text.Json;
 
-namespace DBChatPro.Services
+namespace AIDb.Core.Services
 {
     public class AIService(IConfiguration config, IServiceProvider serviceProvider): IAIService
     {

@@ -1,7 +1,7 @@
 using Amazon.BedrockRuntime;
 using Amazon.Extensions.NETCore.Setup;
-using DBChatPro;
-using DBChatPro.Services;
+using AIDb.Core;
+using AIDb.Core.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

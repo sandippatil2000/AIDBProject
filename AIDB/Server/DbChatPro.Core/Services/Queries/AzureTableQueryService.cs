@@ -1,8 +1,8 @@
 ﻿using Azure;
 using Azure.Data.Tables;
-using DBChatPro.Models;
+using AIDb.Core.Models;
 
-namespace DBChatPro
+namespace AIDb.Core
 {
     public class AzureTableQueryService(TableServiceClient tableServiceClient) : IQueryService
     {

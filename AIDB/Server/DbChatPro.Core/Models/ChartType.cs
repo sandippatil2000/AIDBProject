@@ -1,4 +1,4 @@
-﻿namespace DBChatPro.Models
+﻿namespace AIDb.Core.Models
 {
     public enum ChartType
     {

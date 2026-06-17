@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using DbChatPro.Core.Data;
+using AIDb.Core.Data;
 
-namespace DBChatPro.Services
+namespace AIDb.Core.Services
 {
     public class InMemoryConnectionService : IConnectionService
     {

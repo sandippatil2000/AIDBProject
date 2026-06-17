@@ -4,7 +4,7 @@ VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 16.0.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbChatPro.MCPServer", "DbChatPro.MCPServer\DbChatPro.MCPServer.csproj", "{56949DD0-3A89-4726-F738-46B723CA83B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbChatPro.Core", "DbChatPro.Core\DbChatPro.Core.csproj", "{E20F507C-B26A-4063-8567-041BA2043F13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDb.Core", "DbChatPro.Core\AIDb.Core.csproj", "{E20F507C-B26A-4063-8567-041BA2043F13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDbAPI", "AIDbAPI\AIDbAPI.csproj", "{53AE50D8-6FB6-4A26-BC07-4ECF79E27FA4}"
 EndProject

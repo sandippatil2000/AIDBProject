@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using DBChatPro.Services;
-using DBChatPro;
+using AIDb.Core.Services;
+using AIDb.Core;
 
 namespace AIDbAPI.Controllers
 {
