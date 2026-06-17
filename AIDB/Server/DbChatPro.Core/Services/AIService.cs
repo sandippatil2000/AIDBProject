@@ -13,6 +13,7 @@ using OpenAI;
 using System.ClientModel;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace AIDb.Core.Services
 {
@@ -142,7 +143,9 @@ namespace AIDb.Core.Services
 
 
             string text = response.Messages[0].Text;
-
+            Console.WriteLine(text);
+            text = text.Replace("json", "");
+            text = text.Replace("```", "");
             return JsonSerializer.Deserialize<List<ChartRecommendation>>(text) ?? new List<ChartRecommendation>();
         }
     }
