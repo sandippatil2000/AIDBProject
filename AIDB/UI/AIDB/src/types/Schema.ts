@@ -41,3 +41,14 @@ export interface ChartRecommendation {
   title: string;
   reasoning: string;
 }
+
+export interface TableSchema {
+  tableName: string;
+  columns: string[];
+}
+
+export interface DatabaseSchema {
+  schemaStructured: TableSchema[];
+  schemaRaw: string[];
+}
+

@@ -34,6 +34,7 @@ import {
   TableRows as TableRowsIcon,
   PictureAsPdf as PdfIcon,
   FileDownload as CsvIcon,
+  Schema as SchemaIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -46,10 +47,11 @@ import { DatabaseAPI } from '../services/DatabaseAPI';
 import { inferSchema } from '../utils/schemaInference';
 import { recommendCharts } from '../utils/chartRecommender';
 import { buildChartConfig } from '../utils/chartDataBuilder';
-import type { JsonSchema, ChartRecommendation } from '../types/Schema';
+import type { JsonSchema, ChartRecommendation, DatabaseSchema } from '../types/Schema';
 import type { AIRecommendChartsRequest } from '../types/AIRecommendChartsRequest';
 import type { ChartConfig } from '../types/ChartConfig';
 import ReportChart from '../components/ReportChart';
+import ReportSQLSchema from '../components/ReportSQLSchema';
 
 
 
@@ -68,6 +70,12 @@ export const ReportsPage = () => {
   const [resultError, setResultError] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [isPdfExporting, setIsPdfExporting] = useState<boolean>(false);
+
+  // ── Schema Drawer State ─────────────────────────────────────────────────────
+  const [isSchemaDrawerOpen, setIsSchemaDrawerOpen] = useState<boolean>(false);
+  const [schemaData, setSchemaData] = useState<DatabaseSchema | null>(null);
+  const [isSchemaLoading, setIsSchemaLoading] = useState<boolean>(false);
+  const [schemaError, setSchemaError] = useState<string | null>(null);
 
   // ── Refs for PDF export ──────────────────────────────────────────────────────
   const dataTableRef = useRef<HTMLDivElement>(null);
@@ -221,6 +229,48 @@ export const ReportsPage = () => {
     setDataTable(null);
     setResultError(null);
     setHasSubmitted(false);
+
+    // Reset schema states
+    setSchemaData(null);
+    setSchemaError(null);
+    setIsSchemaDrawerOpen(false);
+  };
+
+  // ── Schema Drawer Helpers ───────────────────────────────────────────────────
+  const handleToggleSchemaDrawer = async () => {
+    if (!selectedDb) return;
+
+    if (isSchemaDrawerOpen) {
+      setIsSchemaDrawerOpen(false);
+      return;
+    }
+
+    setIsSchemaDrawerOpen(true);
+
+    if (schemaData) return;
+
+    setIsSchemaLoading(true);
+    setSchemaError(null);
+    try {
+      const response: any = await DatabaseAPI.getSchema(selectedDb);
+      const schema: DatabaseSchema = response?.data || response;
+      if (schema && schema.schemaStructured) {
+        setSchemaData(schema);
+      } else {
+        setSchemaError('No schema structured data found.');
+      }
+    } catch (err: any) {
+      setSchemaError(err?.message ?? 'Failed to load database schema.');
+    } finally {
+      setIsSchemaLoading(false);
+    }
+  };
+
+  const handleInsertIntoPrompt = (text: string) => {
+    setUserPrompt((prev) => {
+      const spacing = prev.length > 0 && !prev.endsWith(' ') ? ' ' : '';
+      return prev + spacing + text;
+    });
   };
 
   const handleSubmit = async () => {
@@ -465,7 +515,7 @@ export const ReportsPage = () => {
           </Box> */}
 
           {/* ── Dropdowns row ─────────────────────────────────────────────── */}
-          <Box sx={{ display: 'flex', gap: 2, mb: 2.5, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2.5, flexWrap: 'wrap', alignItems: 'center' }}>
 
             {/* DB Name */}
             <FormControl sx={{ width: '25%', minWidth: 200 }} required>
@@ -530,6 +580,37 @@ export const ReportsPage = () => {
                 ))}
               </Select>
             </FormControl>
+
+            {/* SQL Schema Button */}
+            <Tooltip title={!selectedDb ? "Select a database first to view schema" : "Toggle Database Schema"} arrow>
+              <span>
+                <Button
+                  id="toggle-schema-btn"
+                  variant="outlined"
+                  size="small"
+                  disabled={!selectedDb}
+                  onClick={handleToggleSchemaDrawer}
+                  startIcon={<SchemaIcon />}
+                  sx={{
+                    height: 40,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    borderColor: 'divider',
+                    color: 'text.primary',
+                    '&:hover': {
+                      borderColor: 'primary.main',
+                      bgcolor: 'action.hover',
+                    },
+                    '&.Mui-disabled': {
+                      borderColor: 'action.disabledBackground',
+                    }
+                  }}
+                >
+                  SQL Schema
+                </Button>
+              </span>
+            </Tooltip>
 
           </Box>
 
@@ -923,6 +1004,17 @@ export const ReportsPage = () => {
           </Box>
         )
       }
+      {/* ── Database Schema Drawer ────────────────────────────────────────── */}
+      <ReportSQLSchema
+        open={isSchemaDrawerOpen}
+        onClose={() => setIsSchemaDrawerOpen(false)}
+        selectedDb={selectedDb}
+        isSchemaLoading={isSchemaLoading}
+        schemaError={schemaError}
+        schemaData={schemaData}
+        onInsertIntoPrompt={handleInsertIntoPrompt}
+        onRetry={handleToggleSchemaDrawer}
+      />
     </Box >
   );
 };
