@@ -26,28 +26,27 @@ import {
   ShowChart as ShowChartIcon,
 } from '@mui/icons-material';
 import DynamicChart from './DynamicChart';
-import SchemaView from './SchemaView';
 import type { JsonSchema } from '../types/Schema';
 import type { ChartConfig } from '../types/ChartConfig';
 
 // ─── Chart meta map ────────────────────────────────────────────────────────────
 const CHART_META: Record<string, { icon: string; label: string }> = {
-  bar:            { icon: '📊', label: 'Bar' },
-  line:           { icon: '📈', label: 'Line' },
-  area:           { icon: '🏔️', label: 'Area' },
-  pie:            { icon: '🥧', label: 'Pie' },
-  doughnut:       { icon: '🍩', label: 'Doughnut' },
-  radar:          { icon: '🕸️', label: 'Radar' },
-  polarArea:      { icon: '🎯', label: 'Polar' },
-  bubble:         { icon: '🫧', label: 'Bubble' },
-  scatter:        { icon: '✨', label: 'Scatter' },
-  mixed:          { icon: '🎨', label: 'Mixed' },
+  bar: { icon: '📊', label: 'Bar' },
+  line: { icon: '📈', label: 'Line' },
+  area: { icon: '🏔️', label: 'Area' },
+  pie: { icon: '🥧', label: 'Pie' },
+  doughnut: { icon: '🍩', label: 'Doughnut' },
+  radar: { icon: '🕸️', label: 'Radar' },
+  polarArea: { icon: '🎯', label: 'Polar' },
+  bubble: { icon: '🫧', label: 'Bubble' },
+  scatter: { icon: '✨', label: 'Scatter' },
+  mixed: { icon: '🎨', label: 'Mixed' },
   // ── New extended chart types ──────────────────────────────────────────────
-  horizontalBar:  { icon: '↔️',  label: 'H-Bar' },
-  stackedBar:     { icon: '🧱', label: 'Stacked' },
-  comboBarLine:   { icon: '🔀', label: 'Combo' },
-  multiAxisLine:  { icon: '📉', label: 'Multi-Axis' },
-  lineDrawTime:   { icon: '🎞️', label: 'DrawTime' },
+  horizontalBar: { icon: '↔️', label: 'H-Bar' },
+  stackedBar: { icon: '🧱', label: 'Stacked' },
+  comboBarLine: { icon: '🔀', label: 'Combo' },
+  multiAxisLine: { icon: '📉', label: 'Multi-Axis' },
+  lineDrawTime: { icon: '🎞️', label: 'DrawTime' },
 };
 
 // ─── Props ─────────────────────────────────────────────────────────────────────
@@ -352,25 +351,7 @@ const ReportChart: React.FC<ReportChartProps> = ({
                       sx={{ minWidth: 'auto', p: 0, cursor: 'default' }}
                     />
 
-                    {/* Data tabs */}
-                    <Tab
-                      value="table"
-                      label={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <TableChartIcon sx={{ fontSize: 15 }} />
-                          <span>Table</span>
-                        </Box>
-                      }
-                    />
-                    <Tab
-                      value="schema"
-                      label={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <AccountTreeIcon sx={{ fontSize: 15 }} />
-                          <span>Schema</span>
-                        </Box>
-                      }
-                    />
+
                   </Tabs>
                 </Box>
 
@@ -406,91 +387,7 @@ const ReportChart: React.FC<ReportChartProps> = ({
                     </Box>
                   )}
 
-                  {/* Table tab */}
-                  {chartActiveTab === 'table' && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pb: 1.5, borderBottom: `1px solid ${theme.palette.divider}` }}>
-                        <TableChartIcon fontSize="small" color="primary" />
-                        <Typography variant="subtitle2" color="text.secondary" sx={{ fontWeight: 700 }}>
-                          Data Table — {chartParsed.length} rows
-                        </Typography>
-                      </Box>
-                      <Box sx={{ overflowX: 'auto' }}>
-                        <Box component="table" sx={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-                          <Box component="thead">
-                            <Box component="tr">
-                              {chartSchema.fields.map((f) => (
-                                <Box
-                                  component="th"
-                                  key={f.key}
-                                  sx={{
-                                    px: 2, py: 1.5,
-                                    textAlign: 'left',
-                                    fontWeight: 700,
-                                    color: 'primary.contrastText',
-                                    fontSize: '0.78rem',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.06em',
-                                    whiteSpace: 'nowrap',
-                                    bgcolor: 'primary.main',
-                                    borderBottom: '2px solid',
-                                    borderColor: 'primary.dark',
-                                  }}
-                                >
-                                  {f.label}
-                                </Box>
-                              ))}
-                            </Box>
-                          </Box>
-                          <Box component="tbody">
-                            {chartParsed.map((row, idx) => (
-                              <Box
-                                component="tr"
-                                key={idx}
-                                sx={{
-                                  bgcolor: idx % 2 === 0 ? 'background.paper' : (t) =>
-                                    t.palette.mode === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(25,118,210,0.03)',
-                                  transition: 'background 0.15s',
-                                  '&:hover': {
-                                    background: (t) =>
-                                      t.palette.mode === 'dark'
-                                        ? 'rgba(255,255,255,0.05)'
-                                        : 'rgba(25,118,210,0.06)',
-                                  },
-                                }}
-                              >
-                                {chartSchema.fields.map((f) => (
-                                  <Box
-                                    component="td"
-                                    key={f.key}
-                                    sx={{
-                                      px: 2, py: 1.25,
-                                      color: 'text.secondary',
-                                      fontSize: '0.85rem',
-                                      borderBottom: '1px solid',
-                                      borderColor: 'divider',
-                                      whiteSpace: 'nowrap',
-                                    }}
-                                  >
-                                    {String(row[f.key] ?? '—')}
-                                  </Box>
-                                ))}
-                              </Box>
-                            ))}
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  )}
 
-                  {/* Schema tab */}
-                  {chartActiveTab === 'schema' && (
-                    <SchemaView
-                      fields={chartSchema.fields}
-                      rowCount={chartSchema.rowCount}
-                      domain={chartSchema.domain}
-                    />
-                  )}
                 </Box>
               </Paper>
             </Box>
