@@ -18,8 +18,6 @@ import {
 } from '@mui/material';
 import {
   BarChart as BarChartIcon,
-  TableChart as TableChartIcon,
-  AccountTree as AccountTreeIcon,
   Psychology as PsychologyIcon,
   AutoAwesome as AutoAwesomeIcon,
   TuneOutlined as TuneOutlinedIcon,

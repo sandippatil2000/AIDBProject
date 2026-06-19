@@ -24,12 +24,6 @@ builder.Services.AddScoped<OracleDatabaseService>();
 builder.Services.AddScoped<IAIService, AIService>();
 
 // Register AWS Bedrock client only when AWS_REGION is configured
-var awsRegion = builder.Configuration.GetValue<string>("AWS_REGION");
-if (!string.IsNullOrEmpty(awsRegion))
-{
-    builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-    builder.Services.AddAWSService<IAmazonBedrockRuntime>();
-}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
