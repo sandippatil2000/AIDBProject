@@ -2,6 +2,10 @@ using Amazon.BedrockRuntime;
 using Amazon.Extensions.NETCore.Setup;
 using AIDb.Core;
 using AIDb.Core.Services;
+using AIDbAPI.Data;
+using AIDbAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Register SQL Server EF Core DbContext
+builder.Services.AddDbContext<AIDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register Repository
+builder.Services.AddScoped<IQueryReportRepository, QueryReportRepository>();
 
 builder.Services.AddSingleton<IConnectionService, InMemoryConnectionService>();
 
