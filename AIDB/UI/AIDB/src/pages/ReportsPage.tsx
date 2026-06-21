@@ -73,6 +73,7 @@ export const ReportsPage = () => {
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [isPdfExporting, setIsPdfExporting] = useState<boolean>(false);
   const [reportName, setReportName] = useState<string>('');
+  const [reportId, setreportId] = useState<number | undefined>(undefined);
 
   // ── Schema Drawer State ─────────────────────────────────────────────────────
   const [isSchemaDrawerOpen, setIsSchemaDrawerOpen] = useState<boolean>(false);
@@ -331,16 +332,28 @@ export const ReportsPage = () => {
       return;
     }
 
+    const reportData = {
+      id: reportId && reportId > 0 ? reportId : undefined,
+      name: reportName.trim(),
+      prompt: userPrompt || null,
+      resultSummary: result?.summary || null,
+      aisqlQuqey: result?.query || null,
+      aiService: selectedAiService || null,
+      aiModel: selectedAiModel || null,
+    };
+
     try {
-      await QueryReportAPI.createQueryReport({
-        name: reportName.trim(),
-        prompt: userPrompt || null,
-        resultSummary: result?.summary || null,
-        aisqlQuqey: result?.query || null,
-        aiService: selectedAiService || null,
-        aiModel: selectedAiModel || null,
-      });
-      alert('Report saved successfully!');
+      if (reportId !== undefined && reportId > 0) {
+        await QueryReportAPI.updateQueryReport(reportId, reportData);
+        alert('Report updated successfully!');
+      } else {
+        const response: any = await QueryReportAPI.createQueryReport(reportData);
+        const createdReport = response?.data || response;
+        if (createdReport && typeof createdReport.id === 'number') {
+          setreportId(createdReport.id);
+        }
+        alert('Report saved successfully!');
+      }
     } catch (err: any) {
       alert(err?.message ?? 'Failed to save report.');
     }

@@ -1,5 +1,6 @@
 using AIDbAPI.Models;
 using AIDbAPI.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AIDbAPI.Controllers
@@ -54,8 +55,8 @@ namespace AIDbAPI.Controllers
                 return NotFound();
             }
 
-            await _repository.UpdateAsync(queryReport);
-            return NoContent();
+            var report= await _repository.UpdateAsync(queryReport);
+            return Ok(new { id = report.Id });
         }
 
         [HttpDelete("{id}")]

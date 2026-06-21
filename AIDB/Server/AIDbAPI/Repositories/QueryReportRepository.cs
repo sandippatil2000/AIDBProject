@@ -32,6 +32,11 @@ namespace AIDbAPI.Repositories
 
         public async Task<QueryReport> UpdateAsync(QueryReport queryReport)
         {
+            var local = _context.QueryReports.Local.FirstOrDefault(entry => entry.Id == queryReport.Id);
+            if (local != null)
+            {
+                _context.Entry(local).State = EntityState.Detached;
+            }
             _context.Entry(queryReport).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return queryReport;
