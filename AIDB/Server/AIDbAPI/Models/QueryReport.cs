@@ -5,6 +5,8 @@ namespace AIDbAPI.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Prompt { get; set; } = string.Empty;
+        public string AIService { get; set; } = string.Empty;
+        public string AIModel { get; set; } = string.Empty;
         public string ResultSummary { get; set; } = string.Empty;
         public string AISQLQuqey { get; set; } = string.Empty;
     }

@@ -35,6 +35,7 @@ import {
   PictureAsPdf as PdfIcon,
   FileDownload as CsvIcon,
   Schema as SchemaIcon,
+  Save as SaveIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
 import { ConnectionAPI } from '../services/ConnactionAPI';
@@ -44,6 +45,7 @@ import { AIAPI } from '../services/AIAPI';
 import { AiService, AiModel } from '../types/DBTypes';
 import type { AISqlQuery } from '../types/AISqlQuery';
 import { DatabaseAPI } from '../services/DatabaseAPI';
+import { QueryReportAPI } from '../services/QueryReportAPI';
 import { inferSchema } from '../utils/schemaInference';
 import { recommendCharts } from '../utils/chartRecommender';
 import { buildChartConfig } from '../utils/chartDataBuilder';
@@ -70,6 +72,7 @@ export const ReportsPage = () => {
   const [resultError, setResultError] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [isPdfExporting, setIsPdfExporting] = useState<boolean>(false);
+  const [reportName, setReportName] = useState<string>('');
 
   // ── Schema Drawer State ─────────────────────────────────────────────────────
   const [isSchemaDrawerOpen, setIsSchemaDrawerOpen] = useState<boolean>(false);
@@ -322,6 +325,27 @@ export const ReportsPage = () => {
     }
   };
 
+  const handleSaveReport = async () => {
+    if (!reportName.trim()) {
+      alert('Please enter a Report Name first.');
+      return;
+    }
+
+    try {
+      await QueryReportAPI.createQueryReport({
+        name: reportName.trim(),
+        prompt: userPrompt || null,
+        resultSummary: result?.summary || null,
+        aisqlQuqey: result?.query || null,
+        aiService: selectedAiService || null,
+        aiModel: selectedAiModel || null,
+      });
+      alert('Report saved successfully!');
+    } catch (err: any) {
+      alert(err?.message ?? 'Failed to save report.');
+    }
+  };
+
   const canSubmit =
     selectedDb !== '' &&
     selectedAiService !== '' &&
@@ -546,7 +570,7 @@ export const ReportsPage = () => {
             </FormControl>
 
             {/* AI Service */}
-            <FormControl sx={{ width: '20%', minWidth: 170 }} required>
+            <FormControl sx={{ minWidth: 140 }} required>
               <InputLabel id="ai-service-label" size="small">AI Service</InputLabel>
               <Select
                 labelId="ai-service-label"
@@ -564,7 +588,7 @@ export const ReportsPage = () => {
             </FormControl>
 
             {/* AI Model */}
-            <FormControl sx={{ width: '20%', minWidth: 180 }} required>
+            <FormControl sx={{ minWidth: 140 }} required>
               <InputLabel id="ai-model-label" size="small">AI Model</InputLabel>
               <Select
                 labelId="ai-model-label"
@@ -580,6 +604,22 @@ export const ReportsPage = () => {
                 ))}
               </Select>
             </FormControl>
+
+            {/* Report Name */}
+            <TextField
+              id="report-name"
+              label="Report Name"
+              placeholder="Enter report name"
+              size="small"
+              value={reportName}
+              onChange={(e) => setReportName(e.target.value)}
+              sx={{
+                width: '20%',
+                minWidth: 100,
+                '& .MuiOutlinedInput-root': { borderRadius: 2 },
+              }}
+              inputProps={{ 'aria-label': 'Report Name' }}
+            />
 
             {/* SQL Schema Button */}
             <Tooltip title={!selectedDb ? "Select a database first to view schema" : "Toggle Database Schema"} arrow>
@@ -609,6 +649,35 @@ export const ReportsPage = () => {
                 >
                   SQL Schema
                 </Button>
+              </span>
+            </Tooltip>
+
+            {/* Save Report Button */}
+            <Tooltip title="Save Report" arrow>
+              <span>
+                <IconButton
+                  id="save-report-btn"
+                  color="primary"
+                  disabled={!reportName.trim()}
+                  onClick={handleSaveReport}
+                  sx={{
+                    height: 40,
+                    width: 40,
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    '&:hover': {
+                      borderColor: 'primary.main',
+                      bgcolor: 'action.hover',
+                    },
+                    '&.Mui-disabled': {
+                      borderColor: 'action.disabledBackground',
+                      color: 'text.disabled',
+                    }
+                  }}
+                >
+                  <SaveIcon />
+                </IconButton>
               </span>
             </Tooltip>
 

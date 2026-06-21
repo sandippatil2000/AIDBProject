@@ -22,3 +22,6 @@ export interface ApiResponse<T> {
   message: string;
   success: boolean;
 }
+
+export type { QueryReport } from './QueryReport';
+
