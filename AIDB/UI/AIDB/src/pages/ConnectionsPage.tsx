@@ -94,21 +94,22 @@ export const ConnectionsPage = () => {
     setExpandedTables((prev) => ({ ...prev, [tableName]: !prev[tableName] }));
   };
 
-  useEffect(() => {
-    const fetchConnections = async () => {
-      try {
-        const response = await DBConnectionAPI.getDBConnections();
-        const data = Array.isArray(response) ? response : (response as any).data || [];
-        if (data && data.length > 0) {
-          setConnections(data);
-        } else {
-          setConnections(mockConnections);
-        }
-      } catch (error) {
-        console.error('Failed to fetch connections:', error);
+  const fetchConnections = async () => {
+    try {
+      const response = await DBConnectionAPI.getDBConnections();
+      const data = Array.isArray(response) ? response : (response as any).data || [];
+      if (data && data.length > 0) {
+        setConnections(data);
+      } else {
         setConnections(mockConnections);
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch connections:', error);
+      setConnections(mockConnections);
+    }
+  };
+
+  useEffect(() => {
     fetchConnections();
   }, []);
 
@@ -125,7 +126,7 @@ export const ConnectionsPage = () => {
   const handleDelete = async (id: number) => {
     try {
       await DBConnectionAPI.deleteDBConnection(id);
-      setConnections((prev) => prev.filter((c) => c.id !== id));
+      await fetchConnections();
     } catch (error) {
       console.error('Failed to delete connection:', error);
     }
@@ -135,13 +136,11 @@ export const ConnectionsPage = () => {
     try {
       if (editingConnection && editingConnection.id) {
         await DBConnectionAPI.updateDBConnection(editingConnection.id, savedConn);
-        setConnections((prev) => prev.map((c) => (c.id === savedConn.id ? savedConn : c)));
       } else {
-        const response = await DBConnectionAPI.createDBConnection(savedConn);
-        const created: DBConnection = (response as any).data ?? response;
-        setConnections((prev) => [...prev, created]);
+        await DBConnectionAPI.createDBConnection(savedConn);
       }
       setIsDialogOpen(false);
+      await fetchConnections();
     } catch (error) {
       console.error('Failed to save connection:', error);
     }

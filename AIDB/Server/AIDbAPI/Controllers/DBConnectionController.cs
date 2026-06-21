@@ -64,9 +64,9 @@ namespace AIDbAPI.Controllers
             var deleted = await _repository.DeleteAsync(id);
             if (!deleted)
             {
-                return NotFound();
+                return Ok();
             }
-            return NoContent();
+            return Ok();
         }
     }
 }
