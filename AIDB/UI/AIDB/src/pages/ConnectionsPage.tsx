@@ -32,14 +32,14 @@ import {
   Close as CloseIcon,
 } from '@mui/icons-material';
 import { DBTypes } from '../types/DBTypes';
-import type { Connection } from '../types/Connection';
+import type { DBConnection } from '../types/DBConnection';
 import { ConnectionDialog } from '../components/ConnectionDialog';
-import { ConnectionAPI } from '../services/ConnactionAPI';
+import { DBConnectionAPI } from '../services/DBConnectionAPI';
 import { DatabaseAPI } from '../services/DatabaseAPI';
 import { mockConnections } from '../services/data';
 import type { DatabaseSchema } from '../types/Schema';
 
-const getStatusColor = (status: Connection['status']) => {
+const getStatusColor = (status: DBConnection['status']) => {
   switch (status) {
     case 'connected':
       return { bg: '#e8f5e9', text: '#2e7d32' };
@@ -83,9 +83,9 @@ const getEngineIconColor = (type: string) => {
 };
 
 export const ConnectionsPage = () => {
-  const [connections, setConnections] = useState<Connection[]>([]);
+  const [connections, setConnections] = useState<DBConnection[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingConnection, setEditingConnection] = useState<Connection | null>(null);
+  const [editingConnection, setEditingConnection] = useState<DBConnection | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [schemaData, setSchemaData] = useState<DatabaseSchema | null>(null);
   const [expandedTables, setExpandedTables] = useState<Record<string, boolean>>({});
@@ -97,7 +97,7 @@ export const ConnectionsPage = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       try {
-        const response = await ConnectionAPI.getConnections();
+        const response = await DBConnectionAPI.getDBConnections();
         const data = Array.isArray(response) ? response : (response as any).data || [];
         if (data && data.length > 0) {
           setConnections(data);
@@ -117,22 +117,29 @@ export const ConnectionsPage = () => {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (conn: Connection) => {
+  const handleEdit = (conn: DBConnection) => {
     setEditingConnection(conn);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: any) => {
-    setConnections((prev) => prev.filter((c) => c.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await DBConnectionAPI.deleteDBConnection(id);
+      setConnections((prev) => prev.filter((c) => c.id !== id));
+    } catch (error) {
+      console.error('Failed to delete connection:', error);
+    }
   };
 
-  const handleSave = async (savedConn: Connection) => {
+  const handleSave = async (savedConn: DBConnection) => {
     try {
-      if (editingConnection) {
+      if (editingConnection && editingConnection.id) {
+        await DBConnectionAPI.updateDBConnection(editingConnection.id, savedConn);
         setConnections((prev) => prev.map((c) => (c.id === savedConn.id ? savedConn : c)));
       } else {
-        await ConnectionAPI.addConnection(savedConn);
-        setConnections((prev) => [...prev, savedConn]);
+        const response = await DBConnectionAPI.createDBConnection(savedConn);
+        const created: DBConnection = (response as any).data ?? response;
+        setConnections((prev) => [...prev, created]);
       }
       setIsDialogOpen(false);
     } catch (error) {
@@ -140,7 +147,7 @@ export const ConnectionsPage = () => {
     }
   };
 
-  const handleTest = async (conn: Connection) => {
+  const handleTest = async (conn: DBConnection) => {
     try {
       const response: any = await DatabaseAPI.getSchema(conn.name);
       const schema: DatabaseSchema = response?.data || response;

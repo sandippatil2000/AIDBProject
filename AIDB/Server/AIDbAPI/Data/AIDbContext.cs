@@ -10,6 +10,7 @@ namespace AIDbAPI.Data
         }
 
         public DbSet<QueryReport> QueryReports { get; set; } = null!;
+        public DbSet<DBConnection> DBConnections { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,6 +19,12 @@ namespace AIDbAPI.Data
             modelBuilder.Entity<QueryReport>(entity =>
             {
                 entity.ToTable("QueryReport");
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<DBConnection>(entity =>
+            {
+                entity.ToTable("DBConnection");
                 entity.HasKey(e => e.Id);
             });
         }

@@ -38,9 +38,9 @@ import {
   Save as SaveIcon,
 } from '@mui/icons-material';
 import type { SelectChangeEvent } from '@mui/material';
-import { ConnectionAPI } from '../services/ConnactionAPI';
+import { DBConnectionAPI } from '../services/DBConnectionAPI';
 import { mockConnections } from '../services/data';
-import type { Connection } from '../types/Connection';
+import type { DBConnection } from '../types/DBConnection';
 import { AIAPI } from '../services/AIAPI';
 import { AiService, AiModel } from '../types/DBTypes';
 import type { AISqlQuery } from '../types/AISqlQuery';
@@ -61,7 +61,7 @@ import ReportSQLSchema from '../components/ReportSQLSchema';
 export const ReportsPage = () => {
 
   // ── State ──────────────────────────────────────────────────────────────────
-  const [connections, setConnections] = useState<Connection[]>([]);
+  const [connections, setConnections] = useState<DBConnection[]>([]);
   const [selectedDb, setSelectedDb] = useState<string>('');
   const [selectedAiService, setSelectedAiService] = useState<string>('');
   const [selectedAiModel, setSelectedAiModel] = useState<string>('');
@@ -102,7 +102,7 @@ export const ReportsPage = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       try {
-        const response = await ConnectionAPI.getConnections();
+        const response = await DBConnectionAPI.getDBConnections();
         const data = Array.isArray(response) ? response : (response as any).data || [];
         setConnections(data && data.length > 0 ? data : mockConnections);
       } catch {

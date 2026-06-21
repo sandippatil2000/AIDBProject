@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AIDbContext>(options =>
 
 // Register Repository
 builder.Services.AddScoped<IQueryReportRepository, QueryReportRepository>();
+builder.Services.AddScoped<IDBConnectionRepository, DBConnectionRepository>();
 
 builder.Services.AddSingleton<IConnectionService, InMemoryConnectionService>();
 

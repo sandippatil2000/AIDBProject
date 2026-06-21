@@ -1,6 +1,6 @@
 import type { DBTypes } from "./DBTypes";
 
-export interface Connection {
+export interface DBConnection {
     id: number;
     name: string;
     connectionString: string;
