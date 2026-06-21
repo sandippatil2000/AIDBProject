@@ -8,19 +8,22 @@ import {
   TextField,
   MenuItem,
   Grid,
-  Box,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@mui/material';
-import type { Connection } from '../types/Connection';
+import type { SelectChangeEvent } from '@mui/material';
+import type { DBConnection } from '../types/DBConnection';
 import { DBTypes } from '../types/DBTypes';
 
 interface ConnectionDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (connection: Connection) => void;
-  connection?: Connection | null;
+  onSave: (connection: DBConnection) => void;
+  connection?: DBConnection | null;
 }
 
-const defaultConnection: Partial<Connection> = {
+const defaultConnection: Partial<DBConnection> = {
   name: '',
   databaseType: DBTypes.POSTGRESQL,
   host: '',
@@ -37,7 +40,7 @@ export const ConnectionDialog = ({
   onSave,
   connection,
 }: ConnectionDialogProps) => {
-  const [formData, setFormData] = useState<Partial<Connection>>(defaultConnection);
+  const [formData, setFormData] = useState<Partial<DBConnection>>(defaultConnection);
 
   useEffect(() => {
     if (open) {
@@ -57,12 +60,16 @@ export const ConnectionDialog = ({
     }));
   };
 
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+    setFormData((prev) => ({
+      ...prev,
+      databaseType: e.target.value as DBConnection['databaseType'],
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
-      ...formData,
-      id: formData.id || Date.now().toString(),
-    } as Connection);
+    onSave(formData as DBConnection);
   };
 
   return (
@@ -86,23 +93,22 @@ export const ConnectionDialog = ({
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                select
-                margin="dense"
-                name="type"
-                label="Database Type"
-                fullWidth
-                variant="outlined"
-                value={formData.databaseType || ''}
-                onChange={handleChange}
-                required
-              >
-                {Object.values(DBTypes).map((type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <FormControl fullWidth margin="dense" required>
+                <InputLabel id="db-type-label">Database Type</InputLabel>
+                <Select
+                  labelId="db-type-label"
+                  id="db-type-select"
+                  value={formData.databaseType || ''}
+                  label="Database Type"
+                  onChange={handleSelectChange}
+                >
+                  {Object.values(DBTypes).map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={8}>
               <TextField
@@ -146,8 +152,8 @@ export const ConnectionDialog = ({
             <Grid item xs={12}>
               <TextField
                 margin="dense"
-                name="ConnectionString"
-                label="Connection String (Optional)"
+                name="connectionString"
+                label="Connection String"
                 type="text"
                 fullWidth
                 multiline
