@@ -28,14 +28,14 @@ namespace AIDb.Core.Data
                 new AIConnection
                 {
                     id = 2,
-                    Name = "MY SQL",
+                    Name = "classicmodels",
                     databaseType = "MYSQL",
-                    host = "analytics.snowflakecomputing.com",
+                    host = "localhost",
                     port = 443,
-                    database = "ANALYTICS_DB",
+                    database = "classicmodels",
                     status = "offline",
                     lastPing = "1 hr ago",
-                    connectionString = ""
+                    connectionString = "Server=localhost;Database=classicmodels;Uid=Sandip;Pwd=Pune@123;\r\n"
                 },
                 new AIConnection
                 {

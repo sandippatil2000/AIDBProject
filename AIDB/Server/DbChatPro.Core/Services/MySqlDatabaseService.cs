@@ -55,7 +55,7 @@ namespace AIDb.Core
             List<KeyValuePair<string, string>> rows = new();
 
             var pairs = conn.connectionString.Split(";");
-            var database = pairs.Where(x => x.Contains("Databases")).FirstOrDefault().Split("=").Last();
+            var database = pairs.Where(x => x.Contains("Database")).FirstOrDefault().Split("=").Last();
 
             string sqlQuery = $@"SELECT 
                                     TABLE_NAME, 
