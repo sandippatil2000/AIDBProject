@@ -190,6 +190,7 @@ export const ReportListPage = () => {
                   <TableRow>
                     <TableCell sx={{ width: 60 }}>#</TableCell>
                     <TableCell>Name</TableCell>
+                    <TableCell>Prompt</TableCell>
                     <TableCell>AI Service</TableCell>
                     <TableCell>AI Model</TableCell>
                     <TableCell sx={{ maxWidth: 300 }}>Result Summary</TableCell>
@@ -213,6 +214,25 @@ export const ReportListPage = () => {
                         <Typography variant="body2" fontWeight={600} color="text.primary" noWrap>
                           {report.name ?? '—'}
                         </Typography>
+                      </TableCell>
+
+                      {/* Prompt */}
+                      <TableCell>
+                        <Tooltip title={report.prompt ?? ''} placement="top" arrow>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              maxWidth: 280,
+                              display: 'block',
+                            }}
+                          >
+                            {report.prompt ?? '—'}
+                          </Typography>
+                        </Tooltip>
                       </TableCell>
 
                       {/* AI Service */}
