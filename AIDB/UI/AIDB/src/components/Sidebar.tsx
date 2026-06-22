@@ -18,6 +18,7 @@ import {
   People as PeopleIcon,
   Settings as SettingsIcon,
   BarChart as BarChartIcon,
+  ListAlt as ListAltIcon,
   ExpandLess,
   ExpandMore,
   Circle as CircleIcon,
@@ -56,6 +57,7 @@ export const navItems: NavItem[] = [
     icon: <BarChartIcon />,
     children: [
       { label: 'Reports', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/reports' },
+      { label: 'Report List', icon: <ListAltIcon sx={{ fontSize: 16 }} />, path: '/report-list' },
       { label: 'Metrics', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/metrics' },
     ],
   },
