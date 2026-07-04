@@ -9,10 +9,10 @@
         /// <summary>Natural-language question the user wants answered with SQL.</summary>
         public string UserPrompt { get; set; } = string.Empty;
 
-        /// <summary>AI model identifier (e.g. "gpt-4o", "claude-3-5-sonnet").</summary>
-        public string AiModel { get; set; } = string.Empty;
+        /// <summary>AI model identifier (e.g. "gpt-4.1", "claude-3-5-sonnet").</summary>
+        public string AiModel { get; set; } = "gpt-4.1";
 
-        /// <summary>AI service provider key (e.g. "AzureOpenAI", "OpenAI", "Ollama", "GitHubModels", "AWSBedrock").</summary>
-        public string AiService { get; set; } = string.Empty;
+        /// <summary>AI service provider key (e.g.  "OpenAI", "AzureOpenAI",, "Ollama", "GitHubModels", "AWSBedrock").</summary>
+        public string AiService { get; set; } = "OpenAI";
     }
 }

@@ -1,5 +1,5 @@
-﻿using DBChatPro;
-using DBChatPro.MCPServer;
+﻿using DbChatBOT;
+using DbChatBOT.MCPServer;
 using AIDb.Core.Models;
 using AIDb.Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -44,7 +44,7 @@ builder.Services
     .AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly()
-    .WithTools<DbChatProServer>();
+    .WithTools<DbChatBOTServer>();
 
 var host = builder.Build();
 host.MapMcp("/mcp");

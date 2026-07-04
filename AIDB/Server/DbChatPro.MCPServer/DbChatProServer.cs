@@ -8,10 +8,10 @@ using AIDb.Core;
 using AIDb;
 
 // Main server class for DbChatPro MCP integration
-namespace DBChatPro.MCPServer
+namespace DbChatBOT.MCPServer
 {
     [McpServerToolType]
-    public class DbChatProServer
+    public class DbChatBOTServer
     {
         // Services for database and AI operations
         //private readonly SqlServerDatabaseService _dataService;
@@ -19,7 +19,7 @@ namespace DBChatPro.MCPServer
         private readonly AIService _aiService;
 
         // Constructor injects required services
-        public DbChatProServer(IDatabaseService dataService, AIService aiService)
+        public DbChatBOTServer(IDatabaseService dataService, AIService aiService)
         {
             _dataService = dataService;
             _aiService = aiService;
@@ -31,8 +31,8 @@ namespace DBChatPro.MCPServer
                 IServiceProvider serviceProvider,
                 IConfiguration config,
                 [Description("The prompt from the user to convert to SQL.")] string prompt,
-                [Description("The AI model name or Azure OpenAI model deployment name to use to convert the user prompt to SQL. (Examples: gpt-4o, gpt-4.1)")] string aiModel,
-                [Description("The AI platform to use. (Must be AzureOpenAI, OpenAI, GitHubModels, or AWSBedrock)")] string aiPlatform
+                [Description("The AI model name or Azure OpenAI model deployment name to use to convert the user prompt to SQL. (Examples:gpt-4.1)")] string aiModel,
+                [Description("The AI platform to use. (Must be OpenAI, AzureOpenAI, GitHubModels)")] string aiPlatform
             )
         {
             // Get config values
