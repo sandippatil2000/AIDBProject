@@ -645,7 +645,7 @@ export const ReportsPage = () => {
                   onClick={handleToggleSchemaDrawer}
                   startIcon={<SchemaIcon />}
                   sx={{
-                    height: 40,
+                    height: 30,
                     borderRadius: 2,
                     textTransform: 'none',
                     fontWeight: 500,
@@ -674,8 +674,8 @@ export const ReportsPage = () => {
                   disabled={!reportName.trim()}
                   onClick={handleSaveReport}
                   sx={{
-                    height: 40,
-                    width: 40,
+                    height: 30,
+                    width: 30,
                     borderRadius: 2,
                     border: '1px solid',
                     borderColor: 'divider',
