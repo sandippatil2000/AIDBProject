@@ -22,6 +22,9 @@ import {
   ExpandLess,
   ExpandMore,
   Circle as CircleIcon,
+  Cable as Cable,
+  History as History,
+  PlaylistAdd as PlaylistAdd
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -47,16 +50,15 @@ export const navItems: NavItem[] = [
     label: 'Data Management',
     icon: <StorageIcon />,
     children: [
-      { label: 'Connections', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/Connections' },
-      { label: 'History', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/History' },
-      { label: 'Config', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/Config' },
+      { label: 'Connections', icon: <Cable sx={{ fontSize: 8 }} />, path: '/Connections' },
+      { label: 'History', icon: <History sx={{ fontSize: 8 }} />, path: '/History' },
     ],
   },
   {
     label: 'Analytics',
     icon: <BarChartIcon />,
     children: [
-      { label: 'Reports', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/reports' },
+      { label: 'Reports', icon: <PlaylistAdd sx={{ fontSize: 8 }} />, path: '/reports' },
       { label: 'Report List', icon: <ListAltIcon sx={{ fontSize: 16 }} />, path: '/report-list' },
       { label: 'Metrics', icon: <CircleIcon sx={{ fontSize: 8 }} />, path: '/metrics' },
     ],

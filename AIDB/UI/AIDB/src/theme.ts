@@ -137,12 +137,13 @@ const theme = createTheme({
         input: { fontSize: XS.fontSize.sm, padding: '4px 8px' },
         sizeSmall: { fontSize: XS.fontSize.xs },
       },
+
     },
     MuiInputLabel: {
       defaultProps: { size: 'small' },
       styleOverrides: {
         root: { fontSize: XS.fontSize.sm },
-        sizeSmall: { fontSize: XS.fontSize.xs },
+        sizeSmall: { fontSize: XS.fontSize.xs, marginTop: '-4px' },
         shrink: { fontSize: XS.fontSize.md },
       },
     },
