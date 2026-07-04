@@ -38,15 +38,15 @@ builder.Services.AddMcpServer(options =>
 
 // Register the MCP server and configure it to use stdio transport.
 // Scan the assembly for tool definitions.
+builder.Services.AddScoped<IDatabaseService,SqlServerDatabaseService>();
+builder.Services.AddScoped<AIService>();
 builder.Services
     .AddMcpServer()
-    .WithStdioServerTransport()
+    .WithHttpTransport()
+    .WithToolsFromAssembly()
     .WithTools<DbChatProServer>();
 
-builder.Services.AddScoped<SqlServerDatabaseService>();
-builder.Services.AddScoped<AIService>();
-
 var host = builder.Build();
-
+host.MapMcp("/mcp");
 // Build and run the host. This starts the MCP server.
 await host.RunAsync();
