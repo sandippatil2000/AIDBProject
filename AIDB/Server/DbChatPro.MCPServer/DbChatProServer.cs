@@ -71,7 +71,7 @@ namespace DbChatBOT.MCPServer
         }
 
         // Tool: Returns the database schema
-        [McpServerTool, Description("Gets the schema of the configured database.")]
+        //[McpServerTool, Description("Gets the schema of the configured database.")]
         public async Task<DatabaseSchema> GetDatabaseSchema(
                 IServiceProvider serviceProvider,
                 IConfiguration config
@@ -90,7 +90,7 @@ namespace DbChatBOT.MCPServer
         }
 
         // Tool: Returns an AI-generated SQL query for a prompt
-        [McpServerTool, Description("Gets an AI generated SQL query based on the user's prompt and configured database schema.")]
+        //[McpServerTool, Description("Gets an AI generated SQL query based on the user's prompt and configured database schema.")]
         public async Task<string> GetAIGeneratedSQLQuery(
                 IServiceProvider serviceProvider,
                 IConfiguration config,
