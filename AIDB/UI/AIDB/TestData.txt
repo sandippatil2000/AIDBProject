@@ -1,5 +1,37 @@
-1. Get top 10 customers with total revenue and mostly ordered product name and product quantity. Show only Customer Name, Total Revenue, Product Name, Product Quantity 
-2. show top 10 mostly sold products by revenue. Show only Product Name, Product Quantity, Total Revenue
+1. Get top 10 customers by total revenue with most frequently ordered product name and product quantity. Show only Customer Name, Total Revenue, Product Name, Product Quantity 
+
+	Get top 10 customers by total revenue with most frequently ordered product name and product quantity. Show only Customer Name, Total Revenue, Product Name, Product Quantity    
+	Show data in table format
+
+2. Show top 10 mostly sold products by revenue. Show only Product Name, Product Quantity, Total Revenue
 3. Show top 10 mostly sold products by revenue by Month for year 2023. 
 Show only Product Name, Product Quantity, Total Revenue, Month.
 Month should be name
+
+MY SQl
+Show list of top 5 mostly rented movies. Show only title description, rental count, rental rate
+Top 10  famous move in Aug 2005 by rental count show only title, rental count
+who is most famous actor in 2006
+
+MCP Config -Github 
+C:\Users\Sandip\AppData\Roaming\Code\User\mcp.json
+
+Use DBChatBOT then Use AI platform "OpenAI", use model "gpt-4.1"
+
+		"DBChatBOT": {
+			"url": "http://localhost:5000/mcp",
+			"type": "http",
+			"env": {
+				"aiPlatform": "OpenAI",
+				"aiModel": "gpt-4.1"
+			},
+			"headers": {
+				"X-OpenAI-Provider": "ai-platform",
+				"X-OpenAI-Model": "gpt-4.1"
+			}
+		}
+Chat 
+1. List products with dicsounts.
+2. Get discount used for product AWC Logo Cap
+3. Get list of products with less stock quantity
+4. Get list of pending Sales Order with ptoduct name

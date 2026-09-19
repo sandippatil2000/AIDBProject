@@ -32,7 +32,11 @@ namespace AIDb.Core.Services
             var builder = new StringBuilder();
             var maxRows = config.GetValue<string>("MAX_ROWS");
 
-            builder.AppendLine("Your are a helpful, cheerful database assistant. Do not respond with any information unrelated to databases or queries.  AI to clean up other names like changing ProductID to Product ID. Use the following database schema when creating your answers:");
+            builder.AppendLine("Your are a helpful, cheerful database assistant." +
+                "Do not respond with any information unrelated to databases or queries.  " +
+                "AI to clean up other names like changing ProductID to Product ID. " +
+                "Do not insert, update, delete data from database" + 
+                "Use the following database schema when creating your answers:");
 
             foreach(var table in dbSchema.SchemaRaw)
             {
