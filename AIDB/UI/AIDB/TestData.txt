@@ -13,7 +13,7 @@ Show list of top 5 mostly rented movies. Show only title description, rental cou
 Top 10  famous move in Aug 2005 by rental count show only title, rental count
 who is most famous actor in 2006
 
-MCP Config -Github 
+MCP Config -Github \
 C:\Users\Sandip\AppData\Roaming\Code\User\mcp.json
 
 Use DBChatBOT then Use AI platform "OpenAI", use model "gpt-4.1"
@@ -31,7 +31,9 @@ Use DBChatBOT then Use AI platform "OpenAI", use model "gpt-4.1"
 			}
 		}
 Chat 
-1. List products with dicsounts.
+1. List products with discount.
 2. Get discount used for product AWC Logo Cap
 3. Get list of products with less stock quantity
 4. Get list of pending Sales Order with ptoduct name
+
+Chat GPT select DbChatBOT.MCPServer.exe in work mode1

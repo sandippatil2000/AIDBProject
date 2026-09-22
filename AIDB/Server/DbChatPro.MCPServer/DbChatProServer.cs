@@ -1,24 +1,18 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.ComponentModel;
-using AIDb.Core.Services;
-using AIDb.Core.Models;
-using ModelContextProtocol.Server;
 using AIDb.Core;
-using AIDb;
+using AIDb.Core.Models;
+using AIDb.Core.Services;
+using Microsoft.Extensions.Configuration;
+using ModelContextProtocol.Server;
+using System.ComponentModel;
 
-// Main server class for DbChatPro MCP integration
 namespace DbChatBOT.MCPServer
 {
     [McpServerToolType]
     public class DbChatBOTServer
     {
-        // Services for database and AI operations
-        //private readonly SqlServerDatabaseService _dataService;
         private readonly IDatabaseService _dataService;
         private readonly AIService _aiService;
 
-        // Constructor injects required services
         public DbChatBOTServer(IDatabaseService dataService, AIService aiService)
         {
             _dataService = dataService;
@@ -35,7 +29,6 @@ namespace DbChatBOT.MCPServer
                 [Description("The AI platform to use. (Must be OpenAI, AzureOpenAI, GitHubModels)")] string aiPlatform
             )
         {
-            // Get config values
             var databaseType = config.GetValue<string>("DATABASETYPE");
             var databaseConnectionString = config.GetValue<string>("DATABASECONNECTIONSTRING");
 
@@ -61,10 +54,9 @@ namespace DbChatBOT.MCPServer
                 throw new ArgumentException("prompt is required.");
             }
 
-            // Build connection and get schema
             var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
-            // Get AI-generated SQL and run it
+
             var aiResponse = await _aiService.GetAISQLQuery(aiModel, aiPlatform, prompt, dbSchema, databaseType);
             var RowData = await _dataService.GetDataTable(connection, aiResponse.query);
             return RowData;
@@ -77,13 +69,12 @@ namespace DbChatBOT.MCPServer
                 IConfiguration config
             )
         {
-            // Get connection string from config
             var databaseConnectionString = config.GetValue<string>("DATABASECONNECTIONSTRING");
             if (string.IsNullOrEmpty(databaseConnectionString))
             {
                 throw new ArgumentException("DATABASECONNECTIONSTRING is not set in the configuration.");
             }
-            // Build connection and get schema
+
             var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
             return dbSchema;
@@ -99,7 +90,6 @@ namespace DbChatBOT.MCPServer
                 [Description("The AI platform to use. (Must be AzureOpenAI, OpenAI, GitHubModels, or AWSBedrock)")] string aiPlatform
             )
         {
-            // Get config values
             var databaseType = config.GetValue<string>("DATABASETYPE");
             var databaseConnectionString = config.GetValue<string>("DATABASECONNECTIONSTRING");
             if (string.IsNullOrEmpty(databaseConnectionString))
@@ -122,10 +112,10 @@ namespace DbChatBOT.MCPServer
             {
                 throw new ArgumentException("prompt is required.");
             }
-            // Build connection and get schema
+
             var connection = new AIConnection() { connectionString = databaseConnectionString };
             var dbSchema = await _dataService.GenerateSchema(connection);
-            // Get AI-generated SQL
+
             var aiResponse = await _aiService.GetAISQLQuery(aiModel, aiPlatform, prompt, dbSchema, databaseType);
             return aiResponse.query;
         }
