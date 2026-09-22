@@ -1,3 +1,0 @@
-Select top 10 customers by revenue, return only customer name and total revenue
-
-Show top 10 most sold products in year 2025, show only product name and count of products and Total sale

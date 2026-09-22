@@ -1,9 +1,0 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; }
-
-/* Custom scrollbar to match theme */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(25, 118, 210, 0.35); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(25, 118, 210, 0.65); }
