@@ -1,7 +1,5 @@
-# 📊 AI-Powered Database Chat and Reports : Benefits Presentation
-
+# 📊 AI-Powered Database Chat and Reports
 ---
-
 ## AI-Powered Database Chat and reports
 **AI-Powered Database Chat and reports**  
 *Transforming Data Interaction*
