@@ -13,10 +13,11 @@
 
 ---
 
-## Solution – AI DB Chat
+## Solution – AI DB Chat 
 - Query databases in **natural language**  
 - Instant answers, no coding required  
-- Accessible to all teams  
+- Accessible to all teams
+- Integration with Chat-GPT, GitHub Copilot, Claude Chat
 
 ---
 
@@ -36,7 +37,7 @@
 
 ---
 
-## Use Cases
+## Use Cases with example
 - Finance: “Show me last quarter’s revenue”  
 - Healthcare: “List patients with pending results”  
 - Logistics: “Which shipments are delayed?”  
