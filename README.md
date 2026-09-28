@@ -53,12 +53,6 @@
 
 ---
 
-## Demo Snapshot
-**User:** “What was the average order value last week?”  
-**AI DB Chat:** “The average order value was $245.”  
-
----
-
 ##  Future Potential
 - Voice-enabled queries  
 - Predictive insights & anomaly detection  
@@ -66,4 +60,16 @@
 - BI tool integration  
 
 ---
+## Demo Snapshot
+<img width="1917" height="722" alt="image" src="https://github.com/user-attachments/assets/c18efc0b-c642-4a84-ac8e-c5c21fab3b8a" />
+
+
+<img width="1902" height="856" alt="image" src="https://github.com/user-attachments/assets/31623d8a-ad8d-47b4-aff7-f7697d4aba56" />
+
+
+<img width="1917" height="863" alt="image" src="https://github.com/user-attachments/assets/0222cc7c-37d6-4e99-846d-9e5f0290b544" />
+
+
+---
+
 
