@@ -18,6 +18,8 @@
 - Instant answers, no coding required  
 - Accessible to all teams
 - Integration with Chat-GPT, GitHub Copilot, Claude Chat
+- Export data to Excel
+- Print Report in PDF format
 
 ---
 
